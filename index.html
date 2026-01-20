@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Practica Vocabulari - Roba</title>
+    <title>Practica Vocabulari</title>
     <style>
         * {
             box-sizing: border-box;
@@ -624,9 +624,9 @@
     <div class="container">
         <!-- Pantalla d'inici -->
         <div class="start-screen" id="start-screen">
-            <h1>Vocabulari de Roba</h1>
-            <p class="subtitle">Practica el vocabulari d'anglès!</p>
-            <div class="emoji">👕👗👟</div>
+            <h1 id="main-title">Carregant...</h1>
+            <p class="subtitle" id="main-subtitle"></p>
+            <div class="emoji">📚✏️🎯</div>
 
             <div class="question-count-selector">
                 <label>Quina modalitat vols?</label>
@@ -700,7 +700,7 @@
 
         <!-- Zona del joc -->
         <div class="game-area" id="game-area">
-            <h1>Vocabulari de Roba</h1>
+            <h1 id="game-title">Vocabulari</h1>
             <p class="subtitle" id="question-counter">Pregunta 1 de 31</p>
 
             <div class="progress-bar">
@@ -766,43 +766,101 @@
     </div>
 
     <script>
-        // Vocabulari amb traduccions
-        const vocabulary = [
-            { en: "bikini", ca: ["biquini", "bikini"] },
-            { en: "boots", ca: ["botes"] },
-            { en: "bra", ca: ["sostenidor", "sostenidors"] },
-            { en: "cardigan", ca: ["jersei obert"] },
-            { en: "coat", ca: ["abric"] },
-            { en: "dress", ca: ["vestit"] },
-            { en: "dressing gown", ca: ["batí"] },
-            { en: "dungarees", ca: ["peto"] },
-            { en: "gloves", ca: ["guants"] },
-            { en: "hat", ca: ["barret", "gorra"] },
-            { en: "jacket", ca: ["jaqueta"] },
-            { en: "jeans", ca: ["texans"] },
-            { en: "jersey", ca: ["jersei"], altEn: ["jumper", "sweater"] },
-            { en: "knickers", ca: ["calces"], altEn: ["panties", "kinikers"] },
-            { en: "nightie", ca: ["camisa de dormir"] },
-            { en: "pyjamas", ca: ["pijama", "pijames"], altEn: ["pajamas"] },
-            { en: "scarf", ca: ["bufanda", "mocador"] },
-            { en: "shirt", ca: ["camisa"] },
-            { en: "shoes", ca: ["sabates", "sabata"] },
-            { en: "shorts", ca: ["pantalons curts", "shorts"] },
-            { en: "skirt", ca: ["faldilla"] },
-            { en: "slippers", ca: ["sabatilles"], altEn: ["snippers"] },
-            { en: "socks", ca: ["mitjons", "mitjo"] },
-            { en: "sweatshirt", ca: ["dessuadora", "sudadera"] },
-            { en: "swimming costume", ca: ["banyador dona"] },
-            { en: "swimming trunks", ca: ["banyador home"] },
-            { en: "tie", ca: ["corbata"] },
-            { en: "tights", ca: ["mitges"] },
-            { en: "tracksuit", ca: ["xandall"] },
-            { en: "trainers", ca: ["bambes"] },
-            { en: "trousers", ca: ["pantalons"] },
-            { en: "t-shirt", ca: ["samarreta", "camiseta"], altEn: ["tshirt", "t shirt"] },
-            { en: "underpants", ca: ["calçotets"] },
-            { en: "uniform", ca: ["uniforme"] }
-        ];
+        // Vocabulari (es carrega des del YAML)
+        let vocabulary = [];
+        let vocabTitle = 'Vocabulari';
+        let vocabDescription = 'Practica el vocabulari';
+
+        // Parsejar YAML senzill
+        function parseYAML(yamlText) {
+            const lines = yamlText.split('\n');
+            const result = { paraules: [] };
+            let currentWord = null;
+            let inParaules = false;
+
+            for (let line of lines) {
+                // Ignorar comentaris i línies buides
+                if (line.trim().startsWith('#') || line.trim() === '') continue;
+
+                // Detectar títol i descripció
+                if (line.startsWith('titulo:')) {
+                    result.titulo = line.substring(7).trim();
+                    continue;
+                }
+                if (line.startsWith('descripcion:')) {
+                    result.descripcion = line.substring(12).trim();
+                    continue;
+                }
+
+                // Detectar secció paraules
+                if (line.startsWith('paraules:')) {
+                    inParaules = true;
+                    continue;
+                }
+
+                if (inParaules) {
+                    // Nova paraula (comença amb "  - en:")
+                    if (line.match(/^\s+-\s*en:/)) {
+                        if (currentWord) {
+                            result.paraules.push(currentWord);
+                        }
+                        const enValue = line.match(/en:\s*(.+)/)[1].trim();
+                        currentWord = { en: enValue, ca: [] };
+                    }
+                    // Camp ca:
+                    else if (line.match(/^\s+ca:/) && currentWord) {
+                        const caMatch = line.match(/ca:\s*\[(.+)\]/);
+                        if (caMatch) {
+                            currentWord.ca = caMatch[1].split(',').map(s => s.trim());
+                        }
+                    }
+                    // Camp altEn:
+                    else if (line.match(/^\s+altEn:/) && currentWord) {
+                        const altMatch = line.match(/altEn:\s*\[(.+)\]/);
+                        if (altMatch) {
+                            currentWord.altEn = altMatch[1].split(',').map(s => s.trim());
+                        }
+                    }
+                }
+            }
+
+            // Afegir última paraula
+            if (currentWord) {
+                result.paraules.push(currentWord);
+            }
+
+            return result;
+        }
+
+        // Carregar vocabulari des del YAML
+        async function loadVocabulary() {
+            try {
+                const response = await fetch('vocabulari.yaml');
+                if (!response.ok) throw new Error('No s\'ha pogut carregar el vocabulari');
+
+                const yamlText = await response.text();
+                const data = parseYAML(yamlText);
+
+                vocabulary = data.paraules;
+                vocabTitle = data.titulo || 'Vocabulari';
+                vocabDescription = data.descripcion || 'Practica el vocabulari';
+
+                // Actualitzar títols
+                document.getElementById('main-title').textContent = vocabTitle;
+                document.getElementById('main-subtitle').textContent = vocabDescription;
+                document.getElementById('game-title').textContent = vocabTitle;
+                document.title = vocabTitle;
+
+                // Actualitzar info de preguntes
+                document.getElementById('count-info').textContent = `Partida de 15 preguntes`;
+
+                console.log(`Carregades ${vocabulary.length} paraules`);
+            } catch (error) {
+                console.error('Error carregant vocabulari:', error);
+                document.getElementById('main-title').textContent = 'Error carregant vocabulari';
+                document.getElementById('main-subtitle').textContent = 'Comprova que el fitxer vocabulari.yaml existeix';
+            }
+        }
 
         // Nombre de preguntes seleccionades
         let selectedQuestionCount = 15;
@@ -1452,7 +1510,9 @@
         });
 
         // Inicialitzar
-        displayHistory();
+        loadVocabulary().then(() => {
+            displayHistory();
+        });
     </script>
 </body>
 </html>
