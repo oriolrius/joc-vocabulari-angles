@@ -1,0 +1,123 @@
+# Llista de vocabulari per practicar
+# Format:
+#   - en: paraula en anglès
+#     ca: [llista, de, traduccions, en, català]
+#     altEn: [alternatives, en, anglès]  # opcional
+#
+# Exemple:
+#   - en: cat
+#     ca: [gat]
+#   - en: dog
+#     ca: [gos, gossa]
+#     altEn: [doggy]
+
+titulo: Vocabulari de Roba
+descripcion: Practica el vocabulari d'anglès sobre roba i accessoris
+
+paraules:
+  - en: bikini
+    ca: [biquini, bikini]
+
+  - en: boots
+    ca: [botes]
+
+  - en: bra
+    ca: [sostenidor, sostenidors]
+
+  - en: cardigan
+    ca: [jersei obert]
+
+  - en: coat
+    ca: [abric]
+
+  - en: dress
+    ca: [vestit]
+
+  - en: dressing gown
+    ca: [batí]
+
+  - en: dungarees
+    ca: [peto]
+
+  - en: gloves
+    ca: [guants]
+
+  - en: hat
+    ca: [barret, gorra]
+
+  - en: jacket
+    ca: [jaqueta]
+
+  - en: jeans
+    ca: [texans]
+
+  - en: jersey
+    ca: [jersei]
+    altEn: [jumper, sweater]
+
+  - en: knickers
+    ca: [calces]
+    altEn: [panties, kinikers]
+
+  - en: nightie
+    ca: [camisa de dormir]
+
+  - en: pyjamas
+    ca: [pijama, pijames]
+    altEn: [pajamas]
+
+  - en: scarf
+    ca: [bufanda, mocador]
+
+  - en: shirt
+    ca: [camisa]
+
+  - en: shoes
+    ca: [sabates, sabata]
+
+  - en: shorts
+    ca: [pantalons curts, shorts]
+
+  - en: skirt
+    ca: [faldilla]
+
+  - en: slippers
+    ca: [sabatilles]
+    altEn: [snippers]
+
+  - en: socks
+    ca: [mitjons, mitjo]
+
+  - en: sweatshirt
+    ca: [dessuadora, sudadera]
+
+  - en: swimming costume
+    ca: [banyador dona]
+
+  - en: swimming trunks
+    ca: [banyador home]
+
+  - en: tie
+    ca: [corbata]
+
+  - en: tights
+    ca: [mitges]
+
+  - en: tracksuit
+    ca: [xandall]
+
+  - en: trainers
+    ca: [bambes]
+
+  - en: trousers
+    ca: [pantalons]
+
+  - en: t-shirt
+    ca: [samarreta, camiseta]
+    altEn: [tshirt, t shirt]
+
+  - en: underpants
+    ca: [calçotets]
+
+  - en: uniform
+    ca: [uniforme]

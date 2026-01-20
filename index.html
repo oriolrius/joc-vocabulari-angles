@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practica Vocabulari - Roba</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            height: 100%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+
+        .stat.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .stat.wrong {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .question-box {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            border: 3px solid #e94560;
+        }
+
+        .direction {
+            font-size: 1.1em;
+            color: #aaa;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .word-to-translate {
+            font-size: 3.5em;
+            font-weight: 900;
+            color: #fff;
+            margin: 15px 0;
+            text-shadow: 0 0 20px rgba(233, 69, 96, 0.8), 0 0 40px rgba(233, 69, 96, 0.5);
+            letter-spacing: 2px;
+            padding: 10px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .input-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #answer-input {
+            flex: 1 1 100%;
+            padding: 15px 20px;
+            font-size: 1.2em;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.3s;
+            min-width: 0;
+        }
+
+        #submit-btn, #next-btn {
+            flex: 1 1 100%;
+        }
+
+        @media (min-width: 500px) {
+            #answer-input {
+                flex: 1 1 auto;
+            }
+            #submit-btn, #next-btn {
+                flex: 0 0 auto;
+            }
+        }
+
+        #answer-input:focus {
+            border-color: #667eea;
+        }
+
+        #answer-input.correct {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+
+        #answer-input.wrong {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        #submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        #next-btn, #start-btn {
+            background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%);
+            color: white;
+            display: none;
+        }
+
+        .feedback {
+            text-align: center;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 1.2em;
+        }
+
+        .feedback.correct {
+            background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+            color: #1b5e20;
+            display: block;
+            border: 3px solid #4CAF50;
+            font-weight: bold;
+        }
+
+        .feedback.wrong {
+            background: linear-gradient(135deg, #ffcdd2 0%, #ef9a9a 100%);
+            color: #b71c1c;
+            display: block;
+            border: 3px solid #f44336;
+        }
+
+        .feedback.hint {
+            background: #fff3e0;
+            color: #e65100;
+            display: block;
+        }
+
+        .correct-answer {
+            display: block;
+            font-size: 2.2em;
+            font-weight: 900;
+            color: #d32f2f;
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 3px dashed #f44336;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .feedback-label {
+            font-size: 1em;
+            font-weight: normal;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Pantalla de resum */
+        .summary {
+            display: none;
+        }
+
+        .summary h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .summary-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .summary-stat {
+            text-align: center;
+        }
+
+        .summary-stat .number {
+            font-size: 3em;
+            font-weight: bold;
+        }
+
+        .summary-stat.correct .number {
+            color: #4CAF50;
+        }
+
+        .summary-stat.wrong .number {
+            color: #f44336;
+        }
+
+        .percentage {
+            font-size: 2em;
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .percentage.excellent {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .percentage.good {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .percentage.needs-practice {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .word-results {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+
+        .word-result {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+
+        .word-result .word {
+            font-weight: bold;
+        }
+
+        .word-result .translation {
+            color: #666;
+        }
+
+        .word-result .status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .word-result .status.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .word-result .status.wrong {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .difficult-words {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .difficult-words h3 {
+            color: #e65100;
+            margin-top: 0;
+        }
+
+        .difficult-word {
+            display: inline-block;
+            background: white;
+            padding: 5px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        /* Pantalla d'inici */
+        .start-screen {
+            text-align: center;
+        }
+
+        .start-screen h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .history {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .history h3 {
+            color: #666;
+        }
+
+        .history-item {
+            background: #f5f5f5;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        #clear-history-btn {
+            background: #f44336;
+            color: white;
+        }
+
+        .game-area {
+            display: none;
+        }
+
+        .emoji {
+            font-size: 3em;
+            margin: 20px 0;
+        }
+
+        .question-count-selector {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+
+        .question-count-selector label {
+            display: block;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .count-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .count-btn {
+            padding: 12px 24px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: 3px solid #ddd;
+            border-radius: 12px;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 60px;
+        }
+
+        .count-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .count-btn.active, .mode-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .mode-btn {
+            padding: 12px 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: 3px solid #ddd;
+            border-radius: 12px;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .mode-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .count-info {
+            margin-top: 15px;
+            color: #888;
+            font-size: 0.95em;
+        }
+
+        /* Taula d'estadístiques */
+        .stats-table-container {
+            max-height: 500px;
+            overflow-y: auto;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
+        }
+
+        .stats-table thead {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .stats-table th {
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .stats-table th:first-child,
+        .stats-table td:first-child {
+            text-align: left;
+            padding-left: 15px;
+        }
+
+        .stats-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        .stats-table tbody tr:hover {
+            background: #f5f5f5;
+        }
+
+        .stats-table .word-ca {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stats-table .word-en {
+            color: #666;
+        }
+
+        .stat-cell {
+            font-size: 0.85em;
+        }
+
+        .stat-correct {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .stat-wrong {
+            color: #c62828;
+            font-weight: bold;
+        }
+
+        .stat-none {
+            color: #999;
+        }
+
+        /* Pantalla a repassar */
+        .review-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            border-left: 5px solid #e91e63;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .review-card .words {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .review-card .word-ca {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .review-card .word-en {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .review-card .error-info {
+            font-size: 0.9em;
+            color: #888;
+            display: flex;
+            gap: 15px;
+        }
+
+        .review-card .error-badge {
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .review-card .error-badge.en-ca {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .review-card .error-badge.ca-en {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .review-card .error-badge.worst {
+            background: #c62828;
+            color: white;
+        }
+
+        .review-empty {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .review-empty .emoji {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Pantalla d'inici -->
+        <div class="start-screen" id="start-screen">
+            <h1>Vocabulari de Roba</h1>
+            <p class="subtitle">Practica el vocabulari d'anglès!</p>
+            <div class="emoji">👕👗👟</div>
+
+            <div class="question-count-selector">
+                <label>Quina modalitat vols?</label>
+                <div class="count-buttons">
+                    <button class="mode-btn" data-mode="en-ca">Anglès → Català</button>
+                    <button class="mode-btn" data-mode="ca-en">Català → Anglès</button>
+                    <button class="mode-btn active" data-mode="mixed">Barrejat</button>
+                </div>
+            </div>
+
+            <div class="question-count-selector">
+                <label>Quantes preguntes vols?</label>
+                <div class="count-buttons">
+                    <button class="count-btn" data-count="5">5</button>
+                    <button class="count-btn" data-count="10">10</button>
+                    <button class="count-btn active" data-count="15">15</button>
+                    <button class="count-btn" data-count="20">20</button>
+                    <button class="count-btn" data-count="all">Totes</button>
+                </div>
+                <p class="count-info" id="count-info">Partida de 15 preguntes</p>
+            </div>
+
+            <div class="btn-group">
+                <button id="start-btn" style="display: inline-block;">Comença!</button>
+                <button id="stats-btn" style="display: inline-block; background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%); color: white;">Veure llista</button>
+                <button id="review-btn" style="display: inline-block; background: linear-gradient(135deg, #e91e63 0%, #9c27b0 100%); color: white;">A repassar</button>
+            </div>
+            <div class="history" id="history-section">
+                <h3>Historial de partides:</h3>
+                <div id="history-list"></div>
+                <button id="clear-history-btn" style="margin-top: 15px;">Esborrar historial</button>
+            </div>
+        </div>
+
+        <!-- Pantalla d'estadístiques -->
+        <div class="stats-screen" id="stats-screen" style="display: none;">
+            <h1>Estadístiques</h1>
+            <p class="subtitle">Resultats per paraula</p>
+
+            <div class="stats-table-container">
+                <table class="stats-table" id="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Català</th>
+                            <th>Anglès</th>
+                            <th>EN→CA</th>
+                            <th>CA→EN</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stats-table-body">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="btn-group" style="margin-top: 20px;">
+                <button id="stats-home-btn" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">Tornar a l'inici</button>
+            </div>
+        </div>
+
+        <!-- Pantalla a repassar -->
+        <div class="review-screen" id="review-screen" style="display: none;">
+            <h1>A repassar</h1>
+            <p class="subtitle">Paraules que et costen més</p>
+
+            <div id="review-content"></div>
+
+            <div class="btn-group" style="margin-top: 20px;">
+                <button id="review-home-btn" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">Tornar a l'inici</button>
+            </div>
+        </div>
+
+        <!-- Zona del joc -->
+        <div class="game-area" id="game-area">
+            <h1>Vocabulari de Roba</h1>
+            <p class="subtitle" id="question-counter">Pregunta 1 de 31</p>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+
+            <div class="stats">
+                <div class="stat correct">
+                    <div class="stat-number" id="correct-count">0</div>
+                    <div>Encerts</div>
+                </div>
+                <div class="stat wrong">
+                    <div class="stat-number" id="wrong-count">0</div>
+                    <div>Errors</div>
+                </div>
+            </div>
+
+            <div class="question-box">
+                <div class="direction" id="direction">Tradueix al anglès:</div>
+                <div class="word-to-translate" id="word-to-translate">Loading...</div>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+
+            <div class="input-section">
+                <input type="text" id="answer-input" placeholder="Escriu la traducció..." autocomplete="off">
+                <button id="submit-btn">Envia</button>
+                <button id="next-btn">Següent</button>
+            </div>
+        </div>
+
+        <!-- Pantalla de resum -->
+        <div class="summary" id="summary-screen">
+            <h2>Partida acabada!</h2>
+            <div class="emoji" id="result-emoji">🎉</div>
+
+            <div class="percentage" id="percentage-display"></div>
+
+            <div class="summary-stats">
+                <div class="summary-stat correct">
+                    <div class="number" id="final-correct">0</div>
+                    <div>Encerts</div>
+                </div>
+                <div class="summary-stat wrong">
+                    <div class="number" id="final-wrong">0</div>
+                    <div>Errors</div>
+                </div>
+            </div>
+
+            <div class="difficult-words" id="difficult-section" style="display: none;">
+                <h3>Paraules que et costen més:</h3>
+                <div id="difficult-list"></div>
+            </div>
+
+            <h3>Resum de respostes:</h3>
+            <div class="word-results" id="word-results"></div>
+
+            <div class="btn-group">
+                <button id="play-again-btn" style="display: inline-block; background: linear-gradient(135deg, #4CAF50 0%, #8BC34A 100%); color: white;">Torna a jugar</button>
+                <button id="home-btn" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">Inici</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Vocabulari amb traduccions
+        const vocabulary = [
+            { en: "bikini", ca: ["biquini", "bikini"] },
+            { en: "boots", ca: ["botes"] },
+            { en: "bra", ca: ["sostenidor", "sostenidors"] },
+            { en: "cardigan", ca: ["jersei obert"] },
+            { en: "coat", ca: ["abric"] },
+            { en: "dress", ca: ["vestit"] },
+            { en: "dressing gown", ca: ["batí"] },
+            { en: "dungarees", ca: ["peto"] },
+            { en: "gloves", ca: ["guants"] },
+            { en: "hat", ca: ["barret", "gorra"] },
+            { en: "jacket", ca: ["jaqueta"] },
+            { en: "jeans", ca: ["texans"] },
+            { en: "jersey", ca: ["jersei"], altEn: ["jumper", "sweater"] },
+            { en: "knickers", ca: ["calces"], altEn: ["panties", "kinikers"] },
+            { en: "nightie", ca: ["camisa de dormir"] },
+            { en: "pyjamas", ca: ["pijama", "pijames"], altEn: ["pajamas"] },
+            { en: "scarf", ca: ["bufanda", "mocador"] },
+            { en: "shirt", ca: ["camisa"] },
+            { en: "shoes", ca: ["sabates", "sabata"] },
+            { en: "shorts", ca: ["pantalons curts", "shorts"] },
+            { en: "skirt", ca: ["faldilla"] },
+            { en: "slippers", ca: ["sabatilles"], altEn: ["snippers"] },
+            { en: "socks", ca: ["mitjons", "mitjo"] },
+            { en: "sweatshirt", ca: ["dessuadora", "sudadera"] },
+            { en: "swimming costume", ca: ["banyador dona"] },
+            { en: "swimming trunks", ca: ["banyador home"] },
+            { en: "tie", ca: ["corbata"] },
+            { en: "tights", ca: ["mitges"] },
+            { en: "tracksuit", ca: ["xandall"] },
+            { en: "trainers", ca: ["bambes"] },
+            { en: "trousers", ca: ["pantalons"] },
+            { en: "t-shirt", ca: ["samarreta", "camiseta"], altEn: ["tshirt", "t shirt"] },
+            { en: "underpants", ca: ["calçotets"] },
+            { en: "uniform", ca: ["uniforme"] }
+        ];
+
+        // Nombre de preguntes seleccionades
+        let selectedQuestionCount = 15;
+
+        // Modalitat seleccionada: 'en-ca', 'ca-en', 'mixed'
+        let selectedMode = 'mixed';
+
+        // Estat del joc
+        let gameState = {
+            questions: [],
+            currentIndex: 0,
+            correctCount: 0,
+            wrongCount: 0,
+            results: [],
+            answered: false
+        };
+
+        // Obtenir metadades de dificultat del localStorage
+        function getDifficultyData() {
+            const data = localStorage.getItem('vocabularyDifficulty');
+            return data ? JSON.parse(data) : {};
+        }
+
+        // Guardar metadades de dificultat
+        function saveDifficultyData(data) {
+            localStorage.setItem('vocabularyDifficulty', JSON.stringify(data));
+        }
+
+        // Obtenir historial de partides
+        function getGameHistory() {
+            const data = localStorage.getItem('vocabularyHistory');
+            return data ? JSON.parse(data) : [];
+        }
+
+        // Guardar partida a l'historial
+        function saveGameToHistory(correct, wrong, percentage) {
+            const history = getGameHistory();
+            history.unshift({
+                date: new Date().toLocaleString('ca-ES'),
+                correct: correct,
+                wrong: wrong,
+                percentage: percentage
+            });
+            // Guardar només les últimes 10 partides
+            if (history.length > 10) history.pop();
+            localStorage.setItem('vocabularyHistory', JSON.stringify(history));
+        }
+
+        // Mostrar historial
+        function displayHistory() {
+            const history = getGameHistory();
+            const historyList = document.getElementById('history-list');
+
+            if (history.length === 0) {
+                historyList.innerHTML = '<p style="color: #888;">Encara no has jugat cap partida.</p>';
+                return;
+            }
+
+            historyList.innerHTML = history.map(game => `
+                <div class="history-item">
+                    <span>${game.date}</span>
+                    <span style="color: ${game.percentage >= 80 ? '#4CAF50' : game.percentage >= 50 ? '#f57c00' : '#f44336'}">
+                        ${game.percentage}% (${game.correct}/${game.correct + game.wrong})
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        // Normalitzar text (treure accents i convertir a minúscules)
+        function normalizeText(text) {
+            return text
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[·]/g, '')
+                .trim();
+        }
+
+        // Calcular distància de Levenshtein per fuzzy matching
+        function levenshteinDistance(str1, str2) {
+            const m = str1.length;
+            const n = str2.length;
+            const dp = Array(m + 1).fill(null).map(() => Array(n + 1).fill(0));
+
+            for (let i = 0; i <= m; i++) dp[i][0] = i;
+            for (let j = 0; j <= n; j++) dp[0][j] = j;
+
+            for (let i = 1; i <= m; i++) {
+                for (let j = 1; j <= n; j++) {
+                    if (str1[i - 1] === str2[j - 1]) {
+                        dp[i][j] = dp[i - 1][j - 1];
+                    } else {
+                        dp[i][j] = 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+                    }
+                }
+            }
+            return dp[m][n];
+        }
+
+        // Comprovar si la resposta és correcta o quasi correcta
+        function checkAnswer(userAnswer, correctAnswers) {
+            const normalizedUser = normalizeText(userAnswer);
+
+            for (const answer of correctAnswers) {
+                const normalizedCorrect = normalizeText(answer);
+
+                // Resposta exacta
+                if (normalizedUser === normalizedCorrect) {
+                    return { status: 'correct', message: '<span style="font-size: 1.5em;">✓ Correcte!</span>', correctAnswer: answer };
+                }
+
+                // Fuzzy matching - permetre petits errors
+                const distance = levenshteinDistance(normalizedUser, normalizedCorrect);
+                const maxLength = Math.max(normalizedUser.length, normalizedCorrect.length);
+                const similarity = 1 - (distance / maxLength);
+
+                // Si la similitud és alta (>85%), acceptar com a correcte
+                if (similarity >= 0.85 && distance <= 2) {
+                    return {
+                        status: 'close',
+                        message: `<span class="feedback-label">Quasi perfecte! T'ho dono per bo!</span><span class="correct-answer" style="background: #e8f5e9; border-color: #4CAF50; color: #2e7d32;">${answer}</span>`,
+                        correctAnswer: answer
+                    };
+                }
+            }
+
+            return {
+                status: 'wrong',
+                message: `<span class="feedback-label">✗ Incorrecte! La resposta correcta és:</span><span class="correct-answer">${correctAnswers[0]}</span>`,
+                correctAnswer: correctAnswers[0]
+            };
+        }
+
+        // Generar preguntes per la partida
+        function generateQuestions() {
+            const difficulty = getDifficultyData();
+            let questions = [];
+            let wordPool = [];
+
+            // Crear un pool de paraules amb pesos segons dificultat
+            vocabulary.forEach((word, index) => {
+                const wordKey = word.en;
+                const wordDifficulty = difficulty[wordKey];
+
+                let weight = 1; // Pes base
+                if (wordDifficulty) {
+                    // Calcular errors totals sumant les dues direccions
+                    const enCa = wordDifficulty['en-ca'] || { correct: 0, wrong: 0 };
+                    const caEn = wordDifficulty['ca-en'] || { correct: 0, wrong: 0 };
+                    const totalCorrect = enCa.correct + caEn.correct;
+                    const totalWrong = enCa.wrong + caEn.wrong;
+                    const total = totalCorrect + totalWrong;
+
+                    if (total > 0) {
+                        const errorRate = totalWrong / total;
+                        // Les paraules difícils tenen més pes (fins a 4x)
+                        if (errorRate > 0.3) {
+                            weight = 1 + Math.ceil(errorRate * 4);
+                        }
+                    }
+                }
+
+                // Afegir la paraula al pool segons el seu pes
+                for (let i = 0; i < weight; i++) {
+                    wordPool.push(index);
+                }
+            });
+
+            // Barrejar el pool
+            for (let i = wordPool.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [wordPool[i], wordPool[j]] = [wordPool[j], wordPool[i]];
+            }
+
+            // Determinar quantes preguntes fer
+            const targetCount = selectedQuestionCount === 'all'
+                ? vocabulary.length
+                : Math.min(selectedQuestionCount, vocabulary.length);
+
+            // Seleccionar paraules assegurant varietat
+            const usedWords = new Set();
+            let poolIndex = 0;
+
+            // Funció per obtenir la direcció segons la modalitat
+            function getDirection() {
+                if (selectedMode === 'mixed') {
+                    return Math.random() > 0.5 ? 'ca-en' : 'en-ca';
+                }
+                return selectedMode;
+            }
+
+            // Primera passada: assegurar que tenim varietat de paraules
+            while (questions.length < targetCount && poolIndex < wordPool.length) {
+                const wordIndex = wordPool[poolIndex];
+                poolIndex++;
+
+                // Si ja tenim aquesta paraula i encara no hem cobert totes, saltar
+                if (usedWords.has(wordIndex) && usedWords.size < vocabulary.length && usedWords.size < targetCount) {
+                    continue;
+                }
+
+                usedWords.add(wordIndex);
+                const direction = getDirection();
+                questions.push({ wordIndex: wordIndex, direction: direction });
+            }
+
+            // Si encara necessitem més preguntes, afegir repeticions (prioritzant difícils)
+            poolIndex = 0;
+            while (questions.length < targetCount) {
+                const wordIndex = wordPool[poolIndex % wordPool.length];
+                poolIndex++;
+                const direction = getDirection();
+                questions.push({ wordIndex: wordIndex, direction: direction });
+            }
+
+            // Barrejar les preguntes finals
+            for (let i = questions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [questions[i], questions[j]] = [questions[j], questions[i]];
+            }
+
+            return questions;
+        }
+
+        // Iniciar partida
+        function startGame() {
+            gameState = {
+                questions: generateQuestions(),
+                currentIndex: 0,
+                correctCount: 0,
+                wrongCount: 0,
+                results: [],
+                answered: false
+            };
+
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('summary-screen').style.display = 'none';
+            document.getElementById('game-area').style.display = 'block';
+
+            showQuestion();
+        }
+
+        // Mostrar pregunta actual
+        function showQuestion() {
+            const question = gameState.questions[gameState.currentIndex];
+            const word = vocabulary[question.wordIndex];
+
+            const questionCounter = document.getElementById('question-counter');
+            questionCounter.textContent = `Pregunta ${gameState.currentIndex + 1} de ${gameState.questions.length}`;
+
+            const progress = ((gameState.currentIndex) / gameState.questions.length) * 100;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+
+            const directionEl = document.getElementById('direction');
+            const wordEl = document.getElementById('word-to-translate');
+
+            if (question.direction === 'ca-en') {
+                directionEl.textContent = 'Tradueix a l\'anglès:';
+                // Mostrar una de les opcions catalanes aleatòriament
+                wordEl.textContent = word.ca[Math.floor(Math.random() * word.ca.length)];
+            } else {
+                directionEl.textContent = 'Tradueix al català:';
+                wordEl.textContent = word.en;
+            }
+
+            document.getElementById('answer-input').value = '';
+            document.getElementById('answer-input').className = '';
+            document.getElementById('answer-input').focus();
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('submit-btn').style.display = 'inline-block';
+            document.getElementById('next-btn').style.display = 'none';
+
+            document.getElementById('correct-count').textContent = gameState.correctCount;
+            document.getElementById('wrong-count').textContent = gameState.wrongCount;
+
+            gameState.answered = false;
+        }
+
+        // Enviar resposta
+        function submitAnswer() {
+            if (gameState.answered) return;
+
+            const input = document.getElementById('answer-input');
+            const userAnswer = input.value.trim();
+
+            if (!userAnswer) {
+                input.focus();
+                return;
+            }
+
+            const question = gameState.questions[gameState.currentIndex];
+            const word = vocabulary[question.wordIndex];
+
+            let correctAnswers;
+            if (question.direction === 'ca-en') {
+                correctAnswers = [word.en];
+                if (word.altEn) correctAnswers = correctAnswers.concat(word.altEn);
+            } else {
+                correctAnswers = word.ca;
+            }
+
+            const result = checkAnswer(userAnswer, correctAnswers);
+            const feedback = document.getElementById('feedback');
+
+            // Actualitzar dificultat per direcció
+            const difficulty = getDifficultyData();
+            const wordKey = word.en;
+            const direction = question.direction;
+
+            // Inicialitzar estructura si no existeix
+            if (!difficulty[wordKey]) {
+                difficulty[wordKey] = {
+                    'en-ca': { correct: 0, wrong: 0 },
+                    'ca-en': { correct: 0, wrong: 0 }
+                };
+            }
+            // Migrar dades antigues si cal
+            if (difficulty[wordKey].total !== undefined) {
+                difficulty[wordKey] = {
+                    'en-ca': { correct: 0, wrong: 0 },
+                    'ca-en': { correct: 0, wrong: 0 }
+                };
+            }
+
+            if (result.status === 'correct' || result.status === 'close') {
+                gameState.correctCount++;
+                difficulty[wordKey][direction].correct++;
+                input.className = 'correct';
+                feedback.className = 'feedback correct';
+                feedback.innerHTML = result.message;
+                gameState.results.push({
+                    word: word.en,
+                    translation: word.ca[0],
+                    direction: question.direction,
+                    userAnswer: userAnswer,
+                    correct: true
+                });
+            } else {
+                gameState.wrongCount++;
+                difficulty[wordKey][direction].wrong++;
+                input.className = 'wrong';
+                feedback.className = 'feedback wrong';
+                feedback.innerHTML = result.message;
+                gameState.results.push({
+                    word: word.en,
+                    translation: word.ca[0],
+                    direction: question.direction,
+                    userAnswer: userAnswer,
+                    correct: false
+                });
+            }
+
+            saveDifficultyData(difficulty);
+            feedback.style.display = 'block';
+
+            document.getElementById('correct-count').textContent = gameState.correctCount;
+            document.getElementById('wrong-count').textContent = gameState.wrongCount;
+
+            document.getElementById('submit-btn').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'inline-block';
+            document.getElementById('next-btn').focus();
+
+            gameState.answered = true;
+        }
+
+        // Següent pregunta
+        function nextQuestion() {
+            gameState.currentIndex++;
+
+            if (gameState.currentIndex >= gameState.questions.length) {
+                showSummary();
+            } else {
+                showQuestion();
+            }
+        }
+
+        // Mostrar resum
+        function showSummary() {
+            document.getElementById('game-area').style.display = 'none';
+            document.getElementById('summary-screen').style.display = 'block';
+
+            const total = gameState.correctCount + gameState.wrongCount;
+            const percentage = Math.round((gameState.correctCount / total) * 100);
+
+            // Guardar a l'historial
+            saveGameToHistory(gameState.correctCount, gameState.wrongCount, percentage);
+
+            document.getElementById('final-correct').textContent = gameState.correctCount;
+            document.getElementById('final-wrong').textContent = gameState.wrongCount;
+
+            const percentageDisplay = document.getElementById('percentage-display');
+            const resultEmoji = document.getElementById('result-emoji');
+
+            if (percentage >= 90) {
+                percentageDisplay.className = 'percentage excellent';
+                percentageDisplay.textContent = `${percentage}% - Excel·lent! 🌟`;
+                resultEmoji.textContent = '🎉🏆🌟';
+            } else if (percentage >= 70) {
+                percentageDisplay.className = 'percentage good';
+                percentageDisplay.textContent = `${percentage}% - Molt bé! 👍`;
+                resultEmoji.textContent = '😊👍✨';
+            } else if (percentage >= 50) {
+                percentageDisplay.className = 'percentage good';
+                percentageDisplay.textContent = `${percentage}% - Bé, però pots millorar! 💪`;
+                resultEmoji.textContent = '💪📚';
+            } else {
+                percentageDisplay.className = 'percentage needs-practice';
+                percentageDisplay.textContent = `${percentage}% - Necessites més pràctica! 📖`;
+                resultEmoji.textContent = '📚✏️';
+            }
+
+            // Mostrar resultats per paraula
+            const wordResults = document.getElementById('word-results');
+            wordResults.innerHTML = gameState.results.map(r => `
+                <div class="word-result">
+                    <div>
+                        <span class="word">${r.direction === 'ca-en' ? r.translation : r.word}</span>
+                        <span class="translation"> → ${r.direction === 'ca-en' ? r.word : r.translation}</span>
+                        <br><small style="color: #888;">Tu: ${r.userAnswer}</small>
+                    </div>
+                    <span class="status ${r.correct ? 'correct' : 'wrong'}">${r.correct ? '✓' : '✗'}</span>
+                </div>
+            `).join('');
+
+            // Mostrar paraules difícils
+            const difficulty = getDifficultyData();
+            const difficultWords = Object.entries(difficulty)
+                .filter(([key, data]) => data.total >= 2 && (data.wrong / data.total) > 0.3)
+                .sort((a, b) => (b[1].wrong / b[1].total) - (a[1].wrong / a[1].total))
+                .slice(0, 10);
+
+            const difficultSection = document.getElementById('difficult-section');
+            const difficultList = document.getElementById('difficult-list');
+
+            if (difficultWords.length > 0) {
+                difficultSection.style.display = 'block';
+                difficultList.innerHTML = difficultWords.map(([word, data]) => {
+                    const errorRate = Math.round((data.wrong / data.total) * 100);
+                    return `<span class="difficult-word">${word} (${errorRate}% errors)</span>`;
+                }).join('');
+            } else {
+                difficultSection.style.display = 'none';
+            }
+        }
+
+        // Esborrar historial
+        function clearHistory() {
+            if (confirm('Segur que vols esborrar tot l\'historial i les dades de dificultat?')) {
+                localStorage.removeItem('vocabularyHistory');
+                localStorage.removeItem('vocabularyDifficulty');
+                displayHistory();
+            }
+        }
+
+        // Tornar a l'inici
+        function goHome() {
+            document.getElementById('summary-screen').style.display = 'none';
+            document.getElementById('game-area').style.display = 'none';
+            document.getElementById('stats-screen').style.display = 'none';
+            document.getElementById('review-screen').style.display = 'none';
+            document.getElementById('start-screen').style.display = 'block';
+            displayHistory();
+        }
+
+        // Mostrar paraules a repassar
+        function showReview() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('review-screen').style.display = 'block';
+
+            const difficulty = getDifficultyData();
+            const reviewContent = document.getElementById('review-content');
+
+            // Crear llista de paraules amb errors
+            const wordsWithErrors = vocabulary.map(word => {
+                const stats = difficulty[word.en];
+
+                if (!stats || stats.total !== undefined) {
+                    return { word, enCaWrong: 0, caEnWrong: 0, totalWrong: 0 };
+                }
+
+                const enCa = stats['en-ca'] || { correct: 0, wrong: 0 };
+                const caEn = stats['ca-en'] || { correct: 0, wrong: 0 };
+
+                return {
+                    word,
+                    enCaWrong: enCa.wrong,
+                    caEnWrong: caEn.wrong,
+                    totalWrong: enCa.wrong + caEn.wrong
+                };
+            }).filter(item => item.totalWrong > 0)
+              .sort((a, b) => b.totalWrong - a.totalWrong);
+
+            if (wordsWithErrors.length === 0) {
+                reviewContent.innerHTML = `
+                    <div class="review-empty">
+                        <div class="emoji">🎉</div>
+                        <h3>Cap error encara!</h3>
+                        <p>Juga algunes partides i aquí veuràs les paraules que et costen més.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            reviewContent.innerHTML = wordsWithErrors.map(item => {
+                const word = item.word;
+                const caOptions = word.ca.join(', ');
+                let enOptions = word.en;
+                if (word.altEn && word.altEn.length > 0) {
+                    enOptions += ', ' + word.altEn.join(', ');
+                }
+
+                // Determinar quina direcció té més errors
+                let worstDirection = '';
+                if (item.enCaWrong > item.caEnWrong) {
+                    worstDirection = 'en-ca';
+                } else if (item.caEnWrong > item.enCaWrong) {
+                    worstDirection = 'ca-en';
+                }
+
+                return `
+                    <div class="review-card">
+                        <div class="words">
+                            <span class="word-ca">${caOptions}</span>
+                            <span class="word-en">${enOptions}</span>
+                        </div>
+                        <div class="error-info">
+                            <span class="error-badge en-ca ${worstDirection === 'en-ca' ? 'worst' : ''}">
+                                EN→CA: ${item.enCaWrong} errors
+                            </span>
+                            <span class="error-badge ca-en ${worstDirection === 'ca-en' ? 'worst' : ''}">
+                                CA→EN: ${item.caEnWrong} errors
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Mostrar taula d'estadístiques
+        function showStats() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('stats-screen').style.display = 'block';
+
+            const difficulty = getDifficultyData();
+            const tbody = document.getElementById('stats-table-body');
+
+            // Generar files de la taula
+            tbody.innerHTML = vocabulary.map(word => {
+                const stats = difficulty[word.en] || {
+                    'en-ca': { correct: 0, wrong: 0 },
+                    'ca-en': { correct: 0, wrong: 0 }
+                };
+
+                // Migrar dades antigues
+                if (stats.total !== undefined) {
+                    stats['en-ca'] = { correct: 0, wrong: 0 };
+                    stats['ca-en'] = { correct: 0, wrong: 0 };
+                }
+
+                const enCa = stats['en-ca'] || { correct: 0, wrong: 0 };
+                const caEn = stats['ca-en'] || { correct: 0, wrong: 0 };
+
+                const formatStat = (stat) => {
+                    const total = stat.correct + stat.wrong;
+                    if (total === 0) {
+                        return '<span class="stat-none">-</span>';
+                    }
+                    return `<span class="stat-correct">${stat.correct}</span> / <span class="stat-wrong">${stat.wrong}</span>`;
+                };
+
+                // Construir la llista d'opcions en català
+                const caOptions = word.ca.join(', ');
+
+                // Construir la llista d'opcions en anglès
+                let enOptions = word.en;
+                if (word.altEn && word.altEn.length > 0) {
+                    enOptions += ', ' + word.altEn.join(', ');
+                }
+
+                return `
+                    <tr>
+                        <td class="word-ca">${caOptions}</td>
+                        <td class="word-en">${enOptions}</td>
+                        <td class="stat-cell">${formatStat(enCa)}</td>
+                        <td class="stat-cell">${formatStat(caEn)}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Event listeners
+        document.getElementById('start-btn').addEventListener('click', startGame);
+        document.getElementById('submit-btn').addEventListener('click', submitAnswer);
+        document.getElementById('next-btn').addEventListener('click', nextQuestion);
+        document.getElementById('play-again-btn').addEventListener('click', startGame);
+        document.getElementById('home-btn').addEventListener('click', goHome);
+        document.getElementById('clear-history-btn').addEventListener('click', clearHistory);
+        document.getElementById('stats-btn').addEventListener('click', showStats);
+        document.getElementById('stats-home-btn').addEventListener('click', goHome);
+        document.getElementById('review-btn').addEventListener('click', showReview);
+        document.getElementById('review-home-btn').addEventListener('click', goHome);
+
+        document.getElementById('answer-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (gameState.answered) {
+                    nextQuestion();
+                } else {
+                    submitAnswer();
+                }
+            }
+        });
+
+        // Event listeners per als botons de selecció de modalitat
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Treure la classe active de tots els botons
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                // Afegir la classe active al botó clicat
+                btn.classList.add('active');
+
+                // Actualitzar la modalitat
+                selectedMode = btn.dataset.mode;
+            });
+        });
+
+        // Event listeners per als botons de selecció de nombre de preguntes
+        document.querySelectorAll('.count-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Treure la classe active de tots els botons
+                document.querySelectorAll('.count-btn').forEach(b => b.classList.remove('active'));
+                // Afegir la classe active al botó clicat
+                btn.classList.add('active');
+
+                // Actualitzar el nombre de preguntes
+                const count = btn.dataset.count;
+                selectedQuestionCount = count === 'all' ? 'all' : parseInt(count);
+
+                // Actualitzar el text informatiu
+                const countInfo = document.getElementById('count-info');
+                if (count === 'all') {
+                    countInfo.textContent = `Partida amb totes les ${vocabulary.length} paraules`;
+                } else {
+                    countInfo.textContent = `Partida de ${count} preguntes`;
+                }
+            });
+        });
+
+        // Inicialitzar
+        displayHistory();
+    </script>
+</body>
+</html>
