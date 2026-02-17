@@ -11,113 +11,97 @@
 #     ca: [gos, gossa]
 #     altEn: [doggy]
 
-titulo: Vocabulari de Roba
-descripcion: Practica el vocabulari d'anglès sobre roba i accessoris
+titulo: Vocabulari d'Esports i Hàbits Saludables
+descripcion: Practica el vocabulari d'anglès sobre equipament esportiu i hàbits de vida saludable
 
 paraules:
-  - en: bikini
-    ca: [biquini, bikini]
+  # Equipament esportiu
+  - en: belt
+    ca: [cinturó]
 
-  - en: boots
-    ca: [botes]
+  - en: goggles
+    ca: [ulleres de piscina]
 
-  - en: bra
-    ca: [sostenidor, sostenidors]
+  - en: racket
+    ca: [raqueta]
 
-  - en: cardigan
-    ca: [jersei obert]
+  - en: skates
+    ca: [patins]
 
-  - en: coat
-    ca: [abric]
-
-  - en: dress
-    ca: [vestit]
-
-  - en: dressing gown
-    ca: [batí]
-
-  - en: dungarees
-    ca: [peto]
-
-  - en: gloves
-    ca: [guants]
-
-  - en: hat
-    ca: [barret, gorra]
-
-  - en: jacket
-    ca: [jaqueta]
-
-  - en: jeans
-    ca: [texans]
-
-  - en: jersey
-    ca: [jersei]
-    altEn: [jumper, sweater]
-
-  - en: knickers
-    ca: [calces]
-    altEn: [panties, kinikers]
-
-  - en: nightie
-    ca: [camisa de dormir]
-
-  - en: pyjamas
-    ca: [pijama, pijames]
-    altEn: [pajamas]
-
-  - en: scarf
-    ca: [bufanda, mocador]
-
-  - en: shirt
-    ca: [camisa]
-
-  - en: shoes
-    ca: [sabates, sabata]
-
-  - en: shorts
-    ca: [pantalons curts, shorts]
-
-  - en: skirt
-    ca: [faldilla]
-
-  - en: slippers
-    ca: [sabatilles]
-    altEn: [snippers]
-
-  - en: socks
-    ca: [mitjons, mitjo]
-
-  - en: sweatshirt
-    ca: [dessuadora, sudadera]
-
-  - en: swimming costume
-    ca: [banyador dona]
-
-  - en: swimming trunks
-    ca: [banyador home]
-
-  - en: tie
-    ca: [corbata]
-
-  - en: tights
-    ca: [mitges]
-
-  - en: tracksuit
-    ca: [xandall]
-
-  - en: trainers
+  - en: sneakers
     ca: [bambes]
 
-  - en: trousers
-    ca: [pantalons]
+  - en: stick
+    ca: [stick]
 
-  - en: t-shirt
-    ca: [samarreta, camiseta]
-    altEn: [tshirt, t shirt]
+  - en: wetsuit
+    ca: [neoprè]
 
-  - en: underpants
-    ca: [calçotets]
+  - en: helmet
+    ca: [casc]
 
-  - en: uniform
-    ca: [uniforme]
+  - en: swimsuit
+    ca: [banyador]
+
+  - en: skateboard
+    ca: [skate]
+    altEn: [skate board]
+
+  - en: baseball bat
+    ca: [bate]
+
+  - en: knee pads
+    ca: [genolleres]
+
+  - en: fishing rod
+    ca: [canya]
+
+  - en: net
+    ca: [xarxa]
+
+  - en: whistle
+    ca: [xiulet]
+
+  - en: shuttlecock
+    ca: [volant]
+
+  # Hàbits saludables
+  - en: drink water
+    ca: [beure aigua]
+
+  - en: eat healthy
+    ca: [menjar saludable]
+
+  - en: do exercise
+    ca: [fer exercici]
+
+  - en: sleep well (8 hours)
+    ca: [dormir 8 hores]
+    altEn: [sleep well]
+
+  - en: have good hygiene
+    ca: [tenir bona higiene]
+
+  - en: wash your hands and your body
+    ca: [rentar-te les mans i el cos]
+
+  - en: brush your teeth
+    ca: [rentar-te les dents]
+
+  - en: eat too many sweets
+    ca: [menjar moltes llaminadures]
+
+  - en: drink too much soda
+    ca: [beure molts refrescos]
+
+  - en: no exercise
+    ca: [no fer exercici]
+
+  - en: not sleep enough
+    ca: [no dormir prou]
+
+  - en: talk to others about your feelings
+    ca: [parlar dels teus sentiments]
+
+  - en: eat a balanced diet
+    ca: [menjar equilibrat]
