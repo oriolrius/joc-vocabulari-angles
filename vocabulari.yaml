@@ -1,106 +1,51 @@
-titulo: Vocabulari del Cos
-descripcion: Practica el vocabulari d'anglès sobre parts del cos
+# Examen d'anglès del Nil — 2026-09-29
+# Font: fitxa "Everyday Actions" (21/09/2026)
+# Fallades a la fitxa: get dressed, go to school, have a bath, go to bed
+
+titulo: Everyday Actions
+descripcion: Examen del Nil (29/09/2026) — les accions de cada dia
 
 paraules:
-  - en: shoulder
-    ca: [espatlla]
+  - en: wake up
+    ca: [despertar-se, llevar-se]
+    altEn: [get up]
 
-  - en: elbow
-    ca: [colze]
+  - en: have breakfast
+    ca: [esmorzar]
 
-  - en: chest
-    ca: [pit]
+  - en: brush your teeth
+    ca: [rentar-se les dents]
+    altEn: [brush my teeth]
 
-  - en: hand
-    ca: [mà]
+  - en: get dressed
+    ca: [vestir-se]
 
-  - en: tummy
-    ca: [panxa]
-    altEn: [belly]
+  - en: make your bed
+    ca: [fer el llit]
+    altEn: [make my bed, make the bed]
 
-  - en: bottom
-    ca: [cul]
+  - en: go to school
+    ca: [anar a l'escola, anar al col·legi]
 
-  - en: knee
-    ca: [genoll]
+  - en: have lunch
+    ca: [dinar]
 
-  - en: ankle
-    ca: [turmell]
+  - en: do your homework
+    ca: [fer els deures]
+    altEn: [do my homework]
 
-  - en: nails
-    ca: [ungles]
+  - en: play with friends
+    ca: [jugar amb els amics]
 
-  - en: toes
-    ca: [dit del peu]
+  - en: ride a bike
+    ca: [anar en bici, anar amb bicicleta, anar en bicicleta]
 
-  - en: feet
-    ca: [peus]
+  - en: have a bath
+    ca: [banyar-se, fer-se un bany]
+    altEn: [take a bath]
 
-  - en: foot
-    ca: [peu]
+  - en: have dinner
+    ca: [sopar]
 
-  - en: leg
-    ca: [cama]
-
-  - en: hip
-    ca: [cadera, maluc]
-
-  - en: fingers
-    ca: [dits de la mà]
-
-  - en: thumb
-    ca: [dit gros de la mà]
-
-  - en: arm
-    ca: [braç]
-
-  - en: mouth
-    ca: [boca]
-
-  - en: face
-    ca: [cara]
-
-  - en: back
-    ca: [esquena]
-
-  - en: eyebrows
-    ca: [celles]
-
-  - en: eyelashes
-    ca: [pestanyes]
-
-  - en: nose
-    ca: [nas]
-
-  - en: lips
-    ca: [llavis]
-
-  - en: tongue
-    ca: [llengua]
-
-  - en: neck
-    ca: [coll]
-
-  - en: chin
-    ca: [barbeta]
-
-  - en: tooth
-    ca: [dent]
-
-  - en: teeth
-    ca: [dents]
-
-  - en: ear
-    ca: [orella]
-
-  - en: cheek
-    ca: [galta]
-
-  - en: eye
-    ca: [ull]
-
-  - en: forehead
-    ca: [front]
-
-  - en: hair
-    ca: [cabell]
+  - en: go to bed
+    ca: [anar a dormir, anar al llit]
