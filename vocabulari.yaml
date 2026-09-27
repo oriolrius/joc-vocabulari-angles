@@ -1,106 +1,114 @@
-titulo: Vocabulari del Cos
-descripcion: Practica el vocabulari d'anglès sobre parts del cos
+# Examen d'anglès del Roc — 2026-09-29
+# Font: fitxa "Classroom Objects" (foto Braintoss 2026-09-27)
+# Respostes de la fitxa a revisar (ortografia o paraula incorrecta):
+#   bin=brosa (brossa), board eraser=buradar (esborrador),
+#   bookcase=estanteria (prestatgeria), drawing pin=xintetas (xinxeta),
+#   ruler=regla (regle), sello tape=selo (cel·lo), teacher=profesor (professor)
+
+titulo: Classroom Objects
+descripcion: Examen del Roc (29/09/2026) — els objectes de la classe
 
 paraules:
-  - en: shoulder
-    ca: [espatlla]
+  - en: bin
+    ca: [brossa, paperera]
 
-  - en: elbow
-    ca: [colze]
+  - en: board
+    ca: [pissarra]
 
-  - en: chest
-    ca: [pit]
+  - en: board eraser
+    ca: [esborrador]
 
-  - en: hand
-    ca: [mà]
+  - en: bookcase
+    ca: [prestatgeria, estanteria]
 
-  - en: tummy
-    ca: [panxa]
-    altEn: [belly]
+  - en: box
+    ca: [caixa]
 
-  - en: bottom
-    ca: [cul]
+  - en: calculator
+    ca: [calculadora]
 
-  - en: knee
-    ca: [genoll]
+  - en: chair
+    ca: [cadira]
 
-  - en: ankle
-    ca: [turmell]
+  - en: chalk
+    ca: [guix]
 
-  - en: nails
-    ca: [ungles]
+  - en: computer
+    ca: [ordinador]
 
-  - en: toes
-    ca: [dit del peu]
+  - en: cupboard
+    ca: [armari]
 
-  - en: feet
-    ca: [peus]
+  - en: desk
+    ca: [pupitre, taula]
 
-  - en: foot
-    ca: [peu]
+  - en: drawing
+    ca: [dibuix]
 
-  - en: leg
-    ca: [cama]
+  - en: drawing pin
+    ca: [xinxeta, xinxetes]
 
-  - en: hip
-    ca: [cadera, maluc]
+  - en: folder
+    ca: [carpeta]
 
-  - en: fingers
-    ca: [dits de la mà]
+  - en: glue
+    ca: [cola, pega]
 
-  - en: thumb
-    ca: [dit gros de la mà]
+  - en: paintbrush
+    ca: [pinzell]
 
-  - en: arm
-    ca: [braç]
+  - en: paper
+    ca: [paper]
 
-  - en: mouth
-    ca: [boca]
+  - en: paperclip
+    ca: [clip]
 
-  - en: face
-    ca: [cara]
+  - en: pupils
+    ca: [alumnes]
 
-  - en: back
-    ca: [esquena]
+  - en: scissors
+    ca: [tisores]
 
-  - en: eyebrows
-    ca: [celles]
+  - en: stapler
+    ca: [grapadora]
 
-  - en: eyelashes
-    ca: [pestanyes]
+  - en: sticky tape
+    ca: [cel·lo, cinta adhesiva]
+    altEn: [sellotape, sello tape]
 
-  - en: nose
-    ca: [nas]
+  - en: teacher
+    ca: [professor, mestre]
 
-  - en: lips
-    ca: [llavis]
+  - en: pen
+    ca: [boli, bolígraf]
 
-  - en: tongue
-    ca: [llengua]
+  - en: pencil
+    ca: [llapis]
 
-  - en: neck
-    ca: [coll]
+  - en: rubber
+    ca: [goma]
+    altEn: [eraser]
 
-  - en: chin
-    ca: [barbeta]
+  - en: ruler
+    ca: [regle]
 
-  - en: tooth
-    ca: [dent]
+  - en: classroom
+    ca: [classe, aula]
 
-  - en: teeth
-    ca: [dents]
+  - en: book
+    ca: [llibre]
 
-  - en: ear
-    ca: [orella]
+  - en: notebook
+    ca: [llibreta]
 
-  - en: cheek
-    ca: [galta]
+  - en: marker
+    ca: [retolador]
 
-  - en: eye
-    ca: [ull]
+  - en: crayon
+    ca: [cera, colors]
 
-  - en: forehead
-    ca: [front]
+  - en: backpack
+    ca: [motxilla]
 
-  - en: hair
-    ca: [cabell]
+  - en: sharpener
+    ca: [maquineta]
