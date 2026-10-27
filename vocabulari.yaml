@@ -1,106 +1,191 @@
-titulo: Vocabulari del Cos
-descripcion: Practica el vocabulari d'anglès sobre parts del cos
+# Examen d'anglès del Roc — 2026-10-27
+# Fonts: fitxes "Meat and Fish / Food in General" i "Fruit / Vegetables"
+
+titulo: Food
+descripcion: Examen del Roc (27/10/2026) — aliments
 
 paraules:
-  - en: shoulder
-    ca: [espatlla]
+  # Meat and Fish
+  - en: meat
+    ca: [carn]
 
-  - en: elbow
-    ca: [colze]
+  - en: steak
+    ca: [bistec]
 
-  - en: chest
-    ca: [pit]
+  - en: chicken
+    ca: [pollastre]
 
-  - en: hand
-    ca: [mà]
+  - en: beef
+    ca: [vedella]
 
-  - en: tummy
-    ca: [panxa]
-    altEn: [belly]
+  - en: sausage
+    ca: [salsitxa]
 
-  - en: bottom
-    ca: [cul]
+  - en: ham
+    ca: [pernil]
 
-  - en: knee
-    ca: [genoll]
+  - en: eggs
+    ca: [ous]
 
-  - en: ankle
-    ca: [turmell]
+  - en: fish
+    ca: [peix]
 
-  - en: nails
-    ca: [ungles]
+  - en: lamb
+    ca: [xai]
 
-  - en: toes
-    ca: [dit del peu]
+  # Food in General
+  - en: butter
+    ca: [mantega]
 
-  - en: feet
-    ca: [peus]
+  - en: bread
+    ca: [pa]
 
-  - en: foot
-    ca: [peu]
+  - en: chips
+    ca: [patates fregides]
 
-  - en: leg
-    ca: [cama]
 
-  - en: hip
-    ca: [cadera, maluc]
+  - en: cereal
+    ca: [cereals]
 
-  - en: fingers
-    ca: [dits de la mà]
+  - en: coffee
+    ca: [cafè]
 
-  - en: thumb
-    ca: [dit gros de la mà]
+  - en: honey
+    ca: [mel]
 
-  - en: arm
-    ca: [braç]
+  - en: ice cream
+    ca: [gelat]
 
-  - en: mouth
-    ca: [boca]
+  - en: jam
+    ca: [melmelada]
 
-  - en: face
-    ca: [cara]
+  - en: milk
+    ca: [llet]
 
-  - en: back
-    ca: [esquena]
+  - en: orange juice
+    ca: [suc de taronja]
 
-  - en: eyebrows
-    ca: [celles]
+  - en: soup
+    ca: [sopa]
 
-  - en: eyelashes
-    ca: [pestanyes]
+  - en: toast
+    ca: [torrada]
 
-  - en: nose
-    ca: [nas]
+  - en: water
+    ca: [aigua]
 
-  - en: lips
-    ca: [llavis]
+  - en: wine
+    ca: [vi]
 
-  - en: tongue
-    ca: [llengua]
+  - en: cheese
+    ca: [formatge]
 
-  - en: neck
-    ca: [coll]
+  - en: oil
+    ca: [oli]
 
-  - en: chin
-    ca: [barbeta]
+  - en: sugar
+    ca: [sucre]
 
-  - en: tooth
-    ca: [dent]
+  - en: sweets
+    ca: [dolços]
 
-  - en: teeth
-    ca: [dents]
 
-  - en: ear
-    ca: [orella]
+  - en: cakes
+    ca: [pastissos]
 
-  - en: cheek
-    ca: [galta]
+  - en: biscuits
+    ca: [galetes]
 
-  - en: eye
-    ca: [ull]
 
-  - en: forehead
-    ca: [front]
+  # Fruit
+  - en: watermelon
+    ca: [síndria]
 
-  - en: hair
-    ca: [cabell]
+  - en: melon
+    ca: [meló]
+
+  - en: pineapple
+    ca: [pinya]
+
+  - en: coconut
+    ca: [coco]
+
+  - en: apple
+    ca: [poma]
+
+  - en: orange
+    ca: [taronja]
+
+  - en: lemon
+    ca: [llimona]
+
+  - en: pear
+    ca: [pera]
+
+  - en: peach
+    ca: [préssec]
+
+  - en: grapes
+    ca: [raïm]
+
+  - en: plum
+    ca: [pruna]
+
+  - en: banana
+    ca: [plàtan]
+
+  - en: strawberry
+    ca: [maduixa]
+
+  - en: cherry
+    ca: [cirera]
+
+  # Vegetables
+  - en: cabbage
+    ca: [col]
+
+  - en: salad
+    ca: [amanida]
+
+  - en: lettuce
+    ca: [enciam]
+
+  - en: potato
+    ca: [patata]
+
+  - en: carrot
+    ca: [pastanaga]
+
+  - en: cucumber
+    ca: [cogombre]
+
+  - en: beans
+    ca: [mongetes]
+
+  - en: corn
+    ca: [blat de moro]
+
+
+  - en: tomato
+    ca: [tomàquet]
+
+  - en: green pepper
+    ca: [pebrot verd]
+
+  - en: rice
+    ca: [arròs]
+
+  - en: onion
+    ca: [ceba]
+
+  - en: garlic
+    ca: [all]
+
+  - en: peas
+    ca: [pèsols]
+
+  - en: mushroom
+    ca: [bolet]
+
+  - en: artichoke
+    ca: [carxofa]
