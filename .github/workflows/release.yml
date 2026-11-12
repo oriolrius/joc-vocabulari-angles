@@ -1,0 +1,69 @@
+name: Release binaris
+
+# Compila ./http-server per a cada plataforma i el puja a la release del tag.
+# - Push d'un tag v*  -> crea la release (si no existeix) i hi puja els binaris.
+# - Manual (workflow_dispatch) -> torna a pujar els binaris a un tag existent.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag existent (p. ex. v0.2.0)"
+        required: true
+
+permissions:
+  contents: write
+
+env:
+  TAG: ${{ inputs.tag || github.ref_name }}
+  GH_TOKEN: ${{ github.token }}
+  GH_REPO: ${{ github.repository }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Crear la release si no existeix
+        run: gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "$TAG" --generate-notes --verify-tag
+
+  build:
+    needs: release
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { target: x86_64-unknown-linux-musl,  os: ubuntu-latest,    musl: true }
+          - { target: aarch64-unknown-linux-musl, os: ubuntu-24.04-arm, musl: true }
+          - { target: x86_64-pc-windows-msvc,     os: windows-latest,   ext: .exe }
+          - { target: aarch64-pc-windows-msvc,    os: windows-latest,   ext: .exe }
+          - { target: x86_64-apple-darwin,        os: macos-latest }
+          - { target: aarch64-apple-darwin,       os: macos-latest }
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+        working-directory: rust-http-server
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+
+      - name: Eines musl
+        if: matrix.musl
+        run: sudo apt-get update && sudo apt-get install -y musl-tools
+
+      - name: Toolchain Rust
+        run: rustup update stable --no-self-update && rustup default stable && rustup target add ${{ matrix.target }}
+
+      - name: Compilar
+        env:
+          # Windows: runtime de C estàtic, així no cal instal·lar res.
+          RUSTFLAGS: ${{ contains(matrix.target, 'windows') && '-C target-feature=+crt-static' || '' }}
+        run: cargo build --release --locked --target ${{ matrix.target }}
+
+      - name: Pujar a la release
+        run: |
+          name="http-server-${{ matrix.target }}${{ matrix.ext }}"
+          cp "target/${{ matrix.target }}/release/http-server${{ matrix.ext }}" "$name"
+          gh release upload "$TAG" "$name" --clobber

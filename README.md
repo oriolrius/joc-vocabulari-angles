@@ -8,8 +8,27 @@ Joc web interactiu per practicar vocabulari anglès-català. Ideal per preparar 
 - **Configurable**: Tria el nombre de preguntes (5, 10, 15, 20 o totes)
 - **Estadístiques**: Guarda encerts i errors per paraula i direcció
 - **Paraules difícils**: Les paraules amb més errors apareixen més sovint
+- **Partida de repàs ("Les que fallo més")**: Només pregunta les paraules que falles sovint, i les repeteix fins arribar al nombre de preguntes
 - **Tolerant amb errors**: Accepta petits errors d'escriptura i ignora accents
 - **Vocabulari extern**: Fàcil de canviar la llista de paraules
+
+## Partida de repàs: "Les que fallo més"
+
+A la pantalla d'inici, a **Quines paraules?**, tria **🔁 Les que fallo més**:
+
+- Entren a la partida les paraules amb almenys 1 error i un **30% d'errors o més**
+  (sumant les dues direccions). Les estadístiques es guarden al navegador.
+- Si tens **menys** paraules difícils que preguntes (p. ex. 3 paraules i 10 preguntes),
+  el joc les repeteix en rondes desordenades fins arribar a 10. Cada paraula surt un
+  nombre de vegades semblant i mai dues vegades seguides.
+- Si en tens **més** que preguntes, fa les pitjors (les que tenen més errors).
+- **Totes** fa una pregunta per a cada paraula difícil.
+- En mode **Barrejat**, pregunta més en la direcció on el nen falla més.
+- Si encara no hi ha paraules difícils, el joc ho diu i cal jugar primer una partida normal.
+
+| Inici | Pregunta | Resum |
+|---|---|---|
+| ![Pantalla d'inici amb el repàs](docs/screenshots/inici-repas.png) | ![Pregunta del repàs](docs/screenshots/pregunta.png) | ![Resum de la partida](docs/screenshots/resum.png) |
 
 ## Com usar-lo
 
@@ -74,6 +93,25 @@ cd rust-http-server
 cargo build --release --target x86_64-unknown-linux-musl
 cp target/x86_64-unknown-linux-musl/release/http-server ../http-server
 ```
+
+Si no pots compilar-lo, baixa el binari ja fet de la
+[pàgina de releases](https://github.com/oriolrius/joc-vocabulari-angles/releases/latest):
+
+| Sistema | Fitxer |
+|---|---|
+| Linux x86_64 | `http-server-x86_64-unknown-linux-musl` |
+| Linux ARM64 (Raspberry Pi 64 bits) | `http-server-aarch64-unknown-linux-musl` |
+| Windows x86_64 | `http-server-x86_64-pc-windows-msvc.exe` |
+| Windows ARM64 | `http-server-aarch64-pc-windows-msvc.exe` |
+| macOS Intel | `http-server-x86_64-apple-darwin` |
+| macOS Apple Silicon | `http-server-aarch64-apple-darwin` |
+
+A Linux i macOS: `chmod +x http-server-*`. A macOS, la primera vegada potser cal
+`xattr -d com.apple.quarantine http-server-*`.
+
+El workflow `.github/workflows/release.yml` genera aquests binaris. Corre sol quan
+puges un tag `v*` (`git tag -a v0.3.0 -m v0.3.0 && git push origin v0.3.0`). Per tornar
+a generar-los per a un tag que ja existeix: Actions → *Release binaris* → *Run workflow*.
 
 #### Altres opcions (Python, Node.js)
 
@@ -188,6 +226,7 @@ joc-vocabulari-angles/
 ├── http-server       # Servidor web (binari Rust estàtic, sense dependències)
 ├── rust-http-server/ # Codi font del servidor web
 ├── vocabulari.yaml   # Llista de paraules (editable)
+├── docs/screenshots/ # Captures del README
 └── README.md         # Aquest fitxer
 ```
 
