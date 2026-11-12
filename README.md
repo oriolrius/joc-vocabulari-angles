@@ -1,4 +1,4 @@
-# Joc de Vocabulari Anglès-Català
+# Joc de Vocabulari Anglès<>Català
 
 Joc web interactiu per practicar vocabulari anglès-català. Ideal per preparar exàmens de vocabulari.
 
