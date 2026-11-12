@@ -929,17 +929,46 @@
             `).join('');
         }
 
-        // Normalitzar text (treure accents i convertir a minúscules)
+        // Normalitzar text: minúscules, sense accents, sense puntuació ni espais
+        // ("What's the matter?" = "whats the matter" = "whatsthematter")
         function normalizeText(text) {
             return text
                 .toLowerCase()
                 .normalize('NFD')
                 .replace(/[\u0300-\u036f]/g, '')
-                .replace(/[·]/g, '')
-                .trim();
+                .replace(/[^a-z0-9]/g, '');
         }
 
-        // Calcular distància de Levenshtein per fuzzy matching
+        // Clau "fonètica" tolerant amb faltes típiques (ll/l, ss/s, b/v, h muda, ix/x, y/i)
+        function looseKey(text) {
+            return normalizeText(text)
+                .replace(/h/g, '')
+                .replace(/b/g, 'v')
+                .replace(/y/g, 'i')
+                .replace(/(ix|tx)/g, 'x')
+                .replace(/(.)\1+/g, '$1');
+        }
+
+        // Paraules inicials opcionals (articles, pronoms, "to" dels verbs)
+        const OPTIONAL_PREFIXES = ['un ', 'una ', 'el ', 'la ', 'els ', 'les ', "l'", 'jo ', 'tu ', 'ella ', 'ell ',
+                                   'a ', 'an ', 'the ', 'to '];
+        function stripPrefix(text) {
+            const t = text.trim().toLowerCase();
+            for (const p of OPTIONAL_PREFIXES) {
+                if (t.startsWith(p) && t.length > p.length + 1) return t.substring(p.length);
+            }
+            return t;
+        }
+
+        // Errors permesos segons la llargada de la paraula
+        function allowedErrors(len) {
+            if (len <= 2) return 0;
+            if (len <= 4) return 1;
+            if (len <= 8) return 2;
+            return 3;
+        }
+
+        // Distància de Damerau-Levenshtein (una lletra canviada de lloc compta com 1 error)
         function levenshteinDistance(str1, str2) {
             const m = str1.length;
             const n = str2.length;
@@ -950,10 +979,10 @@
 
             for (let i = 1; i <= m; i++) {
                 for (let j = 1; j <= n; j++) {
-                    if (str1[i - 1] === str2[j - 1]) {
-                        dp[i][j] = dp[i - 1][j - 1];
-                    } else {
-                        dp[i][j] = 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+                    const cost = str1[i - 1] === str2[j - 1] ? 0 : 1;
+                    dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost);
+                    if (i > 1 && j > 1 && str1[i - 1] === str2[j - 2] && str1[i - 2] === str2[j - 1]) {
+                        dp[i][j] = Math.min(dp[i][j], dp[i - 2][j - 2] + 1);
                     }
                 }
             }
@@ -963,27 +992,40 @@
         // Comprovar si la resposta és correcta o quasi correcta
         function checkAnswer(userAnswer, correctAnswers) {
             const normalizedUser = normalizeText(userAnswer);
+            const closeResult = (answer) => ({
+                status: 'close',
+                message: `<span class="feedback-label">Quasi perfecte! T'ho dono per bo!</span><span class="correct-answer" style="background: #e8f5e9; border-color: #4CAF50; color: #2e7d32;">${answer}</span>`,
+                correctAnswer: answer
+            });
 
+            if (!normalizedUser) {
+                return {
+                    status: 'wrong',
+                    message: `<span class="feedback-label">✗ Incorrecte! La resposta correcta és:</span><span class="correct-answer">${correctAnswers[0]}</span>`,
+                    correctAnswer: correctAnswers[0]
+                };
+            }
+
+            // 1) Resposta exacta (ignorant accents, majúscules, puntuació i espais)
             for (const answer of correctAnswers) {
-                const normalizedCorrect = normalizeText(answer);
-
-                // Resposta exacta
-                if (normalizedUser === normalizedCorrect) {
+                if (normalizedUser === normalizeText(answer)) {
                     return { status: 'correct', message: '<span style="font-size: 1.5em;">✓ Correcte!</span>', correctAnswer: answer };
                 }
+            }
 
-                // Fuzzy matching - permetre petits errors
-                const distance = levenshteinDistance(normalizedUser, normalizedCorrect);
-                const maxLength = Math.max(normalizedUser.length, normalizedCorrect.length);
-                const similarity = 1 - (distance / maxLength);
-
-                // Si la similitud és alta (>85%), acceptar com a correcte
-                if (similarity >= 0.85 && distance <= 2) {
-                    return {
-                        status: 'close',
-                        message: `<span class="feedback-label">Quasi perfecte! T'ho dono per bo!</span><span class="correct-answer" style="background: #e8f5e9; border-color: #4CAF50; color: #2e7d32;">${answer}</span>`,
-                        correctAnswer: answer
-                    };
+            // 2) Quasi correcta: petites faltes d'ortografia, lletres canviades,
+            //    o sense article/pronom inicial ("got" per "un got", "laugh" per "to laugh")
+            const userKeys = [looseKey(userAnswer), looseKey(stripPrefix(userAnswer))];
+            for (const answer of correctAnswers) {
+                const answerKeys = [looseKey(answer), looseKey(stripPrefix(answer))];
+                for (const a of answerKeys) {
+                    for (const u of userKeys) {
+                        if (!a || !u) continue;
+                        const distance = levenshteinDistance(u, a);
+                        if (distance <= allowedErrors(a.length)) {
+                            return closeResult(answer);
+                        }
+                    }
                 }
             }
 
