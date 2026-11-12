@@ -204,6 +204,43 @@
             font-weight: bold;
         }
 
+        .feedback.close {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            color: #e65100;
+            display: block;
+            border: 3px solid #fb8c00;
+            font-weight: bold;
+        }
+
+        .spelling-row {
+            display: block;
+            font-size: 1.1em;
+            font-weight: normal;
+            margin-top: 8px;
+        }
+
+        .spelling-row .typed {
+            font-weight: bold;
+            color: #b71c1c;
+        }
+
+        .spelling-row .good {
+            font-size: 1.6em;
+            font-weight: 900;
+            color: #2e7d32;
+        }
+
+        .spelling-row mark {
+            background: #ffeb3b;
+            color: inherit;
+            border-radius: 3px;
+            padding: 0 1px;
+        }
+
+        .spelling-row .typed mark {
+            text-decoration: line-through;
+        }
+
         .feedback.wrong {
             background: linear-gradient(135deg, #ffcdd2 0%, #ef9a9a 100%);
             color: #b71c1c;
@@ -989,51 +1026,112 @@
             return dp[m][n];
         }
 
+        // Clau estricta: només ignora majúscules, signes de puntuació finals i espais de més
+        function strictKey(text) {
+            return text
+                .toLowerCase()
+                .normalize('NFC')
+                .replace(/[’‘`´]/g, "'")
+                .replace(/[?¿!¡.,;:…"]/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
+        // Marca les lletres que sobren (escrit) i les que falten o canvien (correcte)
+        function highlightDiff(typed, correct) {
+            const a = typed.toLowerCase();
+            const b = correct.toLowerCase();
+            const m = a.length, n = b.length;
+            const dp = Array(m + 1).fill(null).map(() => Array(n + 1).fill(0));
+            for (let i = m - 1; i >= 0; i--) {
+                for (let j = n - 1; j >= 0; j--) {
+                    dp[i][j] = a[i] === b[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+                }
+            }
+            const keepA = new Array(m).fill(false), keepB = new Array(n).fill(false);
+            let i = 0, j = 0;
+            while (i < m && j < n) {
+                if (a[i] === b[j]) { keepA[i] = true; keepB[j] = true; i++; j++; }
+                else if (dp[i + 1][j] >= dp[i][j + 1]) i++;
+                else j++;
+            }
+            const paint = (str, keep) => Array.from(str).map((ch, k) =>
+                keep[k] || ch === ' ' ? escapeHtml(ch) : `<mark>${escapeHtml(ch)}</mark>`).join('');
+            return { typed: paint(typed, keepA), correct: paint(correct, keepB) };
+        }
+
+        // Missatge per a una resposta que donem per bona però que no està ben escrita
+        function closeResult(userAnswer, answer, reason) {
+            const titles = {
+                spelling: "👍 T'ho dono per bo, però ho has escrit malament!",
+                accents: "👍 T'ho dono per bo, però compte amb els accents i els apòstrofs!",
+                incomplete: "👍 T'ho dono per bo, però la resposta completa és:"
+            };
+            const clean = t => t.replace(/[?¿!¡.,;:…"]/g, '').replace(/\s+/g, ' ').trim();
+            const diff = highlightDiff(clean(userAnswer), clean(answer));
+            return {
+                status: 'close',
+                reason: reason,
+                message: `<span class="feedback-label">${titles[reason]}</span>` +
+                         `<span class="spelling-row">Has escrit: <span class="typed">${diff.typed}</span></span>` +
+                         `<span class="spelling-row">S'escriu: <span class="good">${diff.correct}</span></span>`,
+                correctAnswer: answer
+            };
+        }
+
         // Comprovar si la resposta és correcta o quasi correcta
         function checkAnswer(userAnswer, correctAnswers) {
             const normalizedUser = normalizeText(userAnswer);
-            const closeResult = (answer) => ({
-                status: 'close',
-                message: `<span class="feedback-label">Quasi perfecte! T'ho dono per bo!</span><span class="correct-answer" style="background: #e8f5e9; border-color: #4CAF50; color: #2e7d32;">${answer}</span>`,
-                correctAnswer: answer
-            });
+            const wrongResult = {
+                status: 'wrong',
+                message: `<span class="feedback-label">✗ Incorrecte! La resposta correcta és:</span><span class="correct-answer">${escapeHtml(correctAnswers[0])}</span>`,
+                correctAnswer: correctAnswers[0]
+            };
+            if (!normalizedUser) return wrongResult;
 
-            if (!normalizedUser) {
-                return {
-                    status: 'wrong',
-                    message: `<span class="feedback-label">✗ Incorrecte! La resposta correcta és:</span><span class="correct-answer">${correctAnswers[0]}</span>`,
-                    correctAnswer: correctAnswers[0]
-                };
-            }
-
-            // 1) Resposta exacta (ignorant accents, majúscules, puntuació i espais)
+            // 1) Perfecte (només ignora majúscules i signes ? ! . ,)
             for (const answer of correctAnswers) {
-                if (normalizedUser === normalizeText(answer)) {
+                if (strictKey(userAnswer) === strictKey(answer)) {
                     return { status: 'correct', message: '<span style="font-size: 1.5em;">✓ Correcte!</span>', correctAnswer: answer };
                 }
             }
 
-            // 2) Quasi correcta: petites faltes d'ortografia, lletres canviades,
-            //    o sense article/pronom inicial ("got" per "un got", "laugh" per "to laugh")
-            const userKeys = [looseKey(userAnswer), looseKey(stripPrefix(userAnswer))];
+            // 2) Bé, però amb accents, apòstrofs, guionets o espais diferents
             for (const answer of correctAnswers) {
-                const answerKeys = [looseKey(answer), looseKey(stripPrefix(answer))];
-                for (const a of answerKeys) {
-                    for (const u of userKeys) {
-                        if (!a || !u) continue;
-                        const distance = levenshteinDistance(u, a);
-                        if (distance <= allowedErrors(a.length)) {
-                            return closeResult(answer);
-                        }
-                    }
+                if (normalizedUser === normalizeText(answer)) {
+                    return closeResult(userAnswer, answer, 'accents');
                 }
             }
 
-            return {
-                status: 'wrong',
-                message: `<span class="feedback-label">✗ Incorrecte! La resposta correcta és:</span><span class="correct-answer">${correctAnswers[0]}</span>`,
-                correctAnswer: correctAnswers[0]
-            };
+            // 3) Bé, però sense l'article / pronom / "to" del principi
+            for (const answer of correctAnswers) {
+                if (normalizeText(stripPrefix(userAnswer)) === normalizeText(stripPrefix(answer))) {
+                    return closeResult(userAnswer, answer, 'incomplete');
+                }
+            }
+
+            // 4) Petites faltes d'ortografia (mostra la resposta acceptada més semblant)
+            const userKeys = [looseKey(userAnswer), looseKey(stripPrefix(userAnswer))];
+            let best = null, bestDistance = Infinity;
+            for (const answer of correctAnswers) {
+                const answerKeys = [looseKey(answer), looseKey(stripPrefix(answer))];
+                let accepted = false;
+                for (const a of answerKeys) {
+                    for (const u of userKeys) {
+                        if (a && u && levenshteinDistance(u, a) <= allowedErrors(a.length)) accepted = true;
+                    }
+                }
+                if (!accepted) continue;
+                const d = levenshteinDistance(normalizedUser, normalizeText(answer));
+                if (d < bestDistance) { best = answer; bestDistance = d; }
+            }
+            if (best) return closeResult(userAnswer, best, 'spelling');
+
+            return wrongResult;
         }
 
         // Generar preguntes per la partida
@@ -1232,14 +1330,16 @@
                 gameState.correctCount++;
                 difficulty[wordKey][direction].correct++;
                 input.className = 'correct';
-                feedback.className = 'feedback correct';
+                feedback.className = result.status === 'close' ? 'feedback close' : 'feedback correct';
                 feedback.innerHTML = result.message;
                 gameState.results.push({
                     word: word.en,
                     translation: word.ca[0],
                     direction: question.direction,
                     userAnswer: userAnswer,
-                    correct: true
+                    correct: true,
+                    misspelled: result.status === 'close',
+                    rightSpelling: result.correctAnswer
                 });
             } else {
                 gameState.wrongCount++;
@@ -1322,9 +1422,10 @@
                     <div>
                         <span class="word">${r.direction === 'ca-en' ? r.translation : r.word}</span>
                         <span class="translation"> → ${r.direction === 'ca-en' ? r.word : r.translation}</span>
-                        <br><small style="color: #888;">Tu: ${r.userAnswer}</small>
+                        <br><small style="color: #888;">Tu: ${escapeHtml(r.userAnswer)}</small>
+                        ${r.misspelled ? `<br><small style="color: #e65100; font-weight: bold;">✏️ Mal escrit! S'escriu: ${escapeHtml(r.rightSpelling)}</small>` : ''}
                     </div>
-                    <span class="status ${r.correct ? 'correct' : 'wrong'}">${r.correct ? '✓' : '✗'}</span>
+                    <span class="status ${r.correct ? 'correct' : 'wrong'}">${r.correct ? (r.misspelled ? '✓✏️' : '✓') : '✗'}</span>
                 </div>
             `).join('');
 
