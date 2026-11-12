@@ -48,6 +48,36 @@ paraules:
 
 ### 2. Llençar el servidor web
 
+#### Opció recomanada (Linux / WSL): `./http-server`
+
+El repo porta un servidor web propi escrit en Rust (`./http-server`). És un binari
+estàtic de Linux x86_64, **sense cap dependència** (no cal Python ni res més):
+
+```bash
+cd /ruta/al/joc-vocabulari-angles
+./http-server                      # escolta a 0.0.0.0:54321 i serveix la carpeta actual
+./http-server --port 8000          # un altre port
+./http-server --bind 127.0.0.1     # només aquest ordinador
+./http-server --dir altra/carpeta  # una altra carpeta
+```
+
+Valors per defecte: `--bind 0.0.0.0`, `--port 54321`, `--dir .`. Obre el navegador a
+`http://IP_DE_L_ORDINADOR:54321`.
+
+Envia `Cache-Control: no-cache`: quan canvies de branca o de vocabulari, n'hi ha prou
+de recarregar la pàgina.
+
+Per recompilar-lo (cal `rustup target add x86_64-unknown-linux-musl`):
+
+```bash
+cd rust-http-server
+cargo build --release --target x86_64-unknown-linux-musl
+cp target/x86_64-unknown-linux-musl/release/http-server ../http-server
+```
+
+#### Altres opcions (Python, Node.js)
+
+
 El joc necessita un servidor web per carregar el fitxer YAML. Aquí tens les instruccions per a cada sistema operatiu:
 
 ---
@@ -155,6 +185,8 @@ sudo python3 -m http.server 80
 ```
 joc-vocabulari-angles/
 ├── index.html        # El joc (no cal tocar-lo)
+├── http-server       # Servidor web (binari Rust estàtic, sense dependències)
+├── rust-http-server/ # Codi font del servidor web
 ├── vocabulari.yaml   # Llista de paraules (editable)
 └── README.md         # Aquest fitxer
 ```
