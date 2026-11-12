@@ -487,14 +487,14 @@
             transform: translateY(-2px);
         }
 
-        .count-btn.active, .mode-btn.active {
+        .count-btn.active, .mode-btn.active, .pool-btn.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border-color: transparent;
             box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
 
-        .mode-btn {
+        .mode-btn, .pool-btn {
             padding: 12px 20px;
             font-size: 1.1em;
             font-weight: bold;
@@ -506,7 +506,7 @@
             transition: all 0.2s ease;
         }
 
-        .mode-btn:hover {
+        .mode-btn:hover, .pool-btn:hover {
             border-color: #667eea;
             color: #667eea;
             transform: translateY(-2px);
@@ -516,6 +516,16 @@
             margin-top: 15px;
             color: #888;
             font-size: 0.95em;
+        }
+
+        .count-info.warn {
+            color: #e65100;
+            font-weight: bold;
+        }
+
+        .pool-btn.errors.active {
+            background: linear-gradient(135deg, #e91e63 0%, #9c27b0 100%);
+            box-shadow: 0 5px 20px rgba(233, 30, 99, 0.4);
         }
 
         /* Taula d'estadístiques */
@@ -664,6 +674,14 @@
             <h1 id="main-title">Carregant...</h1>
             <p class="subtitle" id="main-subtitle"></p>
             <div class="emoji">📚✏️🎯</div>
+
+            <div class="question-count-selector">
+                <label>Quines paraules?</label>
+                <div class="count-buttons">
+                    <button class="pool-btn active" data-pool="all">Totes</button>
+                    <button class="pool-btn errors" data-pool="errors">🔁 Les que fallo més</button>
+                </div>
+            </div>
 
             <div class="question-count-selector">
                 <label>Quina modalitat vols?</label>
@@ -905,6 +923,12 @@
         // Modalitat seleccionada: 'en-ca', 'ca-en', 'mixed'
         let selectedMode = 'mixed';
 
+        // Tipus de partida: 'all' (totes les paraules) o 'errors' (només les que fallem més)
+        let selectedPool = 'all';
+
+        // Una paraula "es falla sovint" si té almenys 1 error i un 30% d'errors o més
+        const HARD_MIN_ERROR_RATE = 0.3;
+
         // Estat del joc
         let gameState = {
             questions: [],
@@ -1134,8 +1158,103 @@
             return wrongResult;
         }
 
+        // Encerts i errors d'una paraula (les dues direccions)
+        function getWordStats(word, difficulty) {
+            const stats = difficulty[word.en];
+            const zero = { correct: 0, wrong: 0 };
+            if (!stats || stats.total !== undefined) {
+                return { enCa: zero, caEn: zero, correct: 0, wrong: 0, errorRate: 0 };
+            }
+            const enCa = stats['en-ca'] || zero;
+            const caEn = stats['ca-en'] || zero;
+            const correct = enCa.correct + caEn.correct;
+            const wrong = enCa.wrong + caEn.wrong;
+            const total = correct + wrong;
+            return { enCa, caEn, correct, wrong, errorRate: total > 0 ? wrong / total : 0 };
+        }
+
+        // Paraules del vocabulari actual que fallem sovint, de la pitjor a la millor
+        function getHardWords() {
+            const difficulty = getDifficultyData();
+            return vocabulary
+                .map((word, index) => ({ index, word, stats: getWordStats(word, difficulty) }))
+                .filter(item => item.stats.wrong > 0 && item.stats.errorRate >= HARD_MIN_ERROR_RATE)
+                .sort((a, b) => b.stats.wrong - a.stats.wrong || b.stats.errorRate - a.stats.errorRate);
+        }
+
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // Partida de repàs: només les paraules que fallem sovint.
+        // Si en tenim menys que preguntes, es repeteixen en rondes desordenades fins arribar al total.
+        function generateErrorQuestions() {
+            const hard = getHardWords();
+            if (hard.length === 0) return [];
+
+            const targetCount = selectedQuestionCount === 'all' ? hard.length : selectedQuestionCount;
+            // Si n'hi ha més que preguntes, ens quedem amb les pitjors
+            const chosen = hard.slice(0, targetCount);
+
+            // Direcció: en mode barrejat, preguntem més en la direcció on fallem més
+            function getDirection(item) {
+                if (selectedMode !== 'mixed') return selectedMode;
+                const enCaWeight = item.stats.enCa.wrong + 1;
+                const caEnWeight = item.stats.caEn.wrong + 1;
+                return Math.random() * (enCaWeight + caEnWeight) < enCaWeight ? 'en-ca' : 'ca-en';
+            }
+
+            const questions = [];
+            let last = -1;
+            while (questions.length < targetCount) {
+                const round = shuffle(chosen.slice());
+                // Evitar la mateixa paraula dues vegades seguides entre rondes
+                if (round.length > 1 && round[0].index === last) {
+                    [round[0], round[1]] = [round[1], round[0]];
+                }
+                for (const item of round) {
+                    if (questions.length >= targetCount) break;
+                    questions.push({ wordIndex: item.index, direction: getDirection(item) });
+                    last = item.index;
+                }
+            }
+            return questions;
+        }
+
+        // Text sota els botons: quantes preguntes i, en mode repàs, quantes paraules
+        function updateCountInfo() {
+            const countInfo = document.getElementById('count-info');
+            countInfo.className = 'count-info';
+            if (selectedPool === 'errors') {
+                const n = getHardWords().length;
+                if (n === 0) {
+                    countInfo.className = 'count-info warn';
+                    countInfo.textContent = 'Encara no hi ha paraules que fallis sovint. Juga primer una partida normal!';
+                    return;
+                }
+                const total = selectedQuestionCount === 'all' ? n : selectedQuestionCount;
+                const words = n === 1 ? '1 paraula que falles' : `${n} paraules que falles`;
+                if (total > n) {
+                    countInfo.textContent = `Tens ${words} sovint: es repetiran barrejades fins a ${total} preguntes`;
+                } else if (total < n) {
+                    countInfo.textContent = `Tens ${words} sovint: farem les ${total} pitjors`;
+                } else {
+                    countInfo.textContent = `Tens ${words} sovint: partida de ${total} preguntes`;
+                }
+                return;
+            }
+            countInfo.textContent = selectedQuestionCount === 'all'
+                ? `Partida amb totes les ${vocabulary.length} paraules`
+                : `Partida de ${selectedQuestionCount} preguntes`;
+        }
+
         // Generar preguntes per la partida
         function generateQuestions() {
+            if (selectedPool === 'errors') return generateErrorQuestions();
             const difficulty = getDifficultyData();
             let questions = [];
             let wordPool = [];
@@ -1227,8 +1346,17 @@
 
         // Iniciar partida
         function startGame() {
+            const questions = generateQuestions();
+            if (questions.length === 0) {
+                // Mode repàs sense paraules difícils: tornar a l'inici amb l'avís
+                goHome();
+                return;
+            }
+            document.getElementById('game-title').textContent =
+                selectedPool === 'errors' ? `🔁 Repàs: ${vocabTitle}` : vocabTitle;
+
             gameState = {
-                questions: generateQuestions(),
+                questions: questions,
                 currentIndex: 0,
                 correctCount: 0,
                 wrongCount: 0,
@@ -1430,10 +1558,8 @@
             `).join('');
 
             // Mostrar paraules difícils
-            const difficulty = getDifficultyData();
-            const difficultWords = Object.entries(difficulty)
-                .filter(([key, data]) => data.total >= 2 && (data.wrong / data.total) > 0.3)
-                .sort((a, b) => (b[1].wrong / b[1].total) - (a[1].wrong / a[1].total))
+            const difficultWords = getHardWords()
+                .filter(item => item.stats.correct + item.stats.wrong >= 2)
                 .slice(0, 10);
 
             const difficultSection = document.getElementById('difficult-section');
@@ -1441,9 +1567,9 @@
 
             if (difficultWords.length > 0) {
                 difficultSection.style.display = 'block';
-                difficultList.innerHTML = difficultWords.map(([word, data]) => {
-                    const errorRate = Math.round((data.wrong / data.total) * 100);
-                    return `<span class="difficult-word">${word} (${errorRate}% errors)</span>`;
+                difficultList.innerHTML = difficultWords.map(item => {
+                    const errorRate = Math.round(item.stats.errorRate * 100);
+                    return `<span class="difficult-word">${escapeHtml(item.word.en)} (${errorRate}% errors)</span>`;
                 }).join('');
             } else {
                 difficultSection.style.display = 'none';
@@ -1456,6 +1582,7 @@
                 localStorage.removeItem('vocabularyHistory');
                 localStorage.removeItem('vocabularyDifficulty');
                 displayHistory();
+                updateCountInfo();
             }
         }
 
@@ -1467,6 +1594,7 @@
             document.getElementById('review-screen').style.display = 'none';
             document.getElementById('start-screen').style.display = 'block';
             displayHistory();
+            updateCountInfo();
         }
 
         // Mostrar paraules a repassar
@@ -1642,13 +1770,17 @@
                 const count = btn.dataset.count;
                 selectedQuestionCount = count === 'all' ? 'all' : parseInt(count);
 
-                // Actualitzar el text informatiu
-                const countInfo = document.getElementById('count-info');
-                if (count === 'all') {
-                    countInfo.textContent = `Partida amb totes les ${vocabulary.length} paraules`;
-                } else {
-                    countInfo.textContent = `Partida de ${count} preguntes`;
-                }
+                updateCountInfo();
+            });
+        });
+
+        // Event listeners per als botons de tipus de partida (totes / les que fallo més)
+        document.querySelectorAll('.pool-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.pool-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedPool = btn.dataset.pool;
+                updateCountInfo();
             });
         });
 

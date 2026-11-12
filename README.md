@@ -8,8 +8,27 @@ Joc web interactiu per practicar vocabulari anglès-català. Ideal per preparar 
 - **Configurable**: Tria el nombre de preguntes (5, 10, 15, 20 o totes)
 - **Estadístiques**: Guarda encerts i errors per paraula i direcció
 - **Paraules difícils**: Les paraules amb més errors apareixen més sovint
+- **Partida de repàs ("Les que fallo més")**: Només pregunta les paraules que falles sovint, i les repeteix fins arribar al nombre de preguntes
 - **Tolerant amb errors**: Accepta petits errors d'escriptura i ignora accents
 - **Vocabulari extern**: Fàcil de canviar la llista de paraules
+
+## Partida de repàs: "Les que fallo més"
+
+A la pantalla d'inici, a **Quines paraules?**, tria **🔁 Les que fallo més**:
+
+- Entren a la partida les paraules amb almenys 1 error i un **30% d'errors o més**
+  (sumant les dues direccions). Les estadístiques es guarden al navegador.
+- Si tens **menys** paraules difícils que preguntes (p. ex. 3 paraules i 10 preguntes),
+  el joc les repeteix en rondes desordenades fins arribar a 10. Cada paraula surt un
+  nombre de vegades semblant i mai dues vegades seguides.
+- Si en tens **més** que preguntes, fa les pitjors (les que tenen més errors).
+- **Totes** fa una pregunta per a cada paraula difícil.
+- En mode **Barrejat**, pregunta més en la direcció on el nen falla més.
+- Si encara no hi ha paraules difícils, el joc ho diu i cal jugar primer una partida normal.
+
+| Inici | Pregunta | Resum |
+|---|---|---|
+| ![Pantalla d'inici amb el repàs](docs/screenshots/inici-repas.png) | ![Pregunta del repàs](docs/screenshots/pregunta.png) | ![Resum de la partida](docs/screenshots/resum.png) |
 
 ## Com usar-lo
 
@@ -207,6 +226,7 @@ joc-vocabulari-angles/
 ├── http-server       # Servidor web (binari Rust estàtic, sense dependències)
 ├── rust-http-server/ # Codi font del servidor web
 ├── vocabulari.yaml   # Llista de paraules (editable)
+├── docs/screenshots/ # Captures del README
 └── README.md         # Aquest fitxer
 ```
 
