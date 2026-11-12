@@ -75,6 +75,25 @@ cargo build --release --target x86_64-unknown-linux-musl
 cp target/x86_64-unknown-linux-musl/release/http-server ../http-server
 ```
 
+Si no pots compilar-lo, baixa el binari ja fet de la
+[pàgina de releases](https://github.com/oriolrius/joc-vocabulari-angles/releases/latest):
+
+| Sistema | Fitxer |
+|---|---|
+| Linux x86_64 | `http-server-x86_64-unknown-linux-musl` |
+| Linux ARM64 (Raspberry Pi 64 bits) | `http-server-aarch64-unknown-linux-musl` |
+| Windows x86_64 | `http-server-x86_64-pc-windows-msvc.exe` |
+| Windows ARM64 | `http-server-aarch64-pc-windows-msvc.exe` |
+| macOS Intel | `http-server-x86_64-apple-darwin` |
+| macOS Apple Silicon | `http-server-aarch64-apple-darwin` |
+
+A Linux i macOS: `chmod +x http-server-*`. A macOS, la primera vegada potser cal
+`xattr -d com.apple.quarantine http-server-*`.
+
+El workflow `.github/workflows/release.yml` genera aquests binaris. Corre sol quan
+puges un tag `v*` (`git tag -a v0.3.0 -m v0.3.0 && git push origin v0.3.0`). Per tornar
+a generar-los per a un tag que ja existeix: Actions → *Release binaris* → *Run workflow*.
+
 #### Altres opcions (Python, Node.js)
 
 
