@@ -1,106 +1,104 @@
-titulo: Vocabulari del Cos
-descripcion: Practica el vocabulari d'anglès sobre parts del cos
+# Examen d'anglès del Roc — 2026-11-12
+# Font: fitxa "Movers Pearson — Vocabulary Unit 1" (30 paraules)
+
+titulo: Movers Unit 1
+descripcion: Examen del Roc (12/11/2026) — vocabulari Unit 1
 
 paraules:
-  - en: shoulder
-    ca: [espatlla]
+  - en: did you go
+    ca: [vas anar, tu vas anar, has anat]
 
-  - en: elbow
-    ca: [colze]
+  - en: she is wearing
+    ca: [porta posat, ella porta, està portant, duu posat]
+    altEn: [she's wearing, shes wearing]
 
-  - en: chest
-    ca: [pit]
-
-  - en: hand
-    ca: [mà]
-
-  - en: tummy
-    ca: [panxa]
-    altEn: [belly]
-
-  - en: bottom
-    ca: [cul]
-
-  - en: knee
-    ca: [genoll]
-
-  - en: ankle
-    ca: [turmell]
-
-  - en: nails
-    ca: [ungles]
-
-  - en: toes
-    ca: [dit del peu]
-
-  - en: feet
-    ca: [peus]
-
-  - en: foot
-    ca: [peu]
-
-  - en: leg
-    ca: [cama]
-
-  - en: hip
-    ca: [cadera, maluc]
-
-  - en: fingers
-    ca: [dits de la mà]
-
-  - en: thumb
-    ca: [dit gros de la mà]
-
-  - en: arm
-    ca: [braç]
-
-  - en: mouth
-    ca: [boca]
-
-  - en: face
-    ca: [cara]
-
-  - en: back
-    ca: [esquena]
-
-  - en: eyebrows
-    ca: [celles]
-
-  - en: eyelashes
-    ca: [pestanyes]
-
-  - en: nose
-    ca: [nas]
-
-  - en: lips
-    ca: [llavis]
-
-  - en: tongue
-    ca: [llengua]
+  - en: moustache
+    ca: [bigoti]
+    altEn: [mustache]
 
   - en: neck
     ca: [coll]
 
-  - en: chin
-    ca: [barbeta]
+  - en: people
+    ca: [gent, persones]
 
-  - en: tooth
-    ca: [dent]
+  - en: above
+    ca: [a sobre, per sobre, sobre, damunt]
 
-  - en: teeth
-    ca: [dents]
+  - en: cup
+    ca: [tassa]
 
-  - en: ear
-    ca: [orella]
+  - en: often
+    ca: [sovint]
 
-  - en: cheek
-    ca: [galta]
+  - en: floor
+    ca: [terra]
 
-  - en: eye
-    ca: [ull]
+  - en: bigger than
+    ca: [més gran que]
 
-  - en: forehead
-    ca: [front]
+  - en: a drawing
+    ca: [un dibuix]
 
-  - en: hair
-    ca: [cabell]
+  - en: wall
+    ca: [paret]
+
+  - en: a glass
+    ca: [un got]
+
+  - en: I want
+    ca: [vull, jo vull]
+
+  - en: I would like
+    ca: [m'agradaria, voldria]
+    altEn: [I'd like, Id like]
+
+  - en: see you
+    ca: [ens veiem, fins després, fins aviat]
+
+  - en: forest
+    ca: [bosc]
+
+  - en: parents
+    ca: [pares]
+
+  - en: last month
+    ca: [el mes passat]
+
+  - en: on holiday
+    ca: [de vacances]
+
+  - en: to shout
+    ca: [cridar]
+    altEn: [shout]
+
+  - en: frightened
+    ca: [espantat, espantada]
+
+  - en: what's the matter
+    ca: [què passa, què et passa]
+    altEn: [whats the matter, what is the matter]
+
+  - en: to laugh
+    ca: [riure]
+    altEn: [laugh]
+
+  - en: I'm hungry
+    ca: [tinc gana]
+    altEn: [Im hungry, I am hungry]
+
+  - en: too
+    ca: [també]
+
+  - en: let's go
+    ca: [anem, som-hi]
+    altEn: [lets go, let us go]
+
+  - en: outside
+    ca: [fora, a fora]
+
+  - en: countries
+    ca: [països]
+
+  - en: easy
+    ca: [fàcil]
