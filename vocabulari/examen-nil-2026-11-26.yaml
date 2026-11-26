@@ -1,0 +1,78 @@
+# Examen d'anglès del Nil — 2026-11-26
+# Font: fitxa "Present Continuous Tense" (foto 2026-11-26), nota VG
+# Errors a la fitxa:
+#   i am (I majúscula), pleaying (playing), rugbby (rugby),
+#   volleball (volleyball), foatball (football), gole (golf)
+
+titulo: Present Continuous
+descripcion: Examen del Nil (26/11/2026) — esports i present continu
+
+paraules:
+  # Esports
+  - en: football
+    ca: [futbol]
+    altEn: [soccer]
+
+  - en: basketball
+    ca: [bàsquet]
+
+  - en: golf
+    ca: [golf]
+
+  - en: hockey
+    ca: [hoquei]
+
+  - en: volleyball
+    ca: [voleibol, vòlei]
+
+  - en: karate
+    ca: [karate]
+
+  - en: tennis
+    ca: [tennis]
+
+  - en: rugby
+    ca: [rugbi]
+
+  - en: baseball
+    ca: [beisbol]
+
+  - en: playing
+    ca: [jugant]
+
+  # Frases en present continu
+  - en: they are playing football
+    ca: [estan jugant a futbol, ells estan jugant a futbol]
+    altEn: [they're playing football]
+
+  - en: I am playing basketball
+    ca: [estic jugant a bàsquet, jo estic jugant a bàsquet]
+    altEn: [I'm playing basketball]
+
+  - en: she is playing golf
+    ca: [està jugant a golf, ella està jugant a golf]
+    altEn: [she's playing golf]
+
+  - en: Jack is playing hockey
+    ca: [en Jack està jugant a hoquei, Jack està jugant a hoquei]
+    altEn: [Jack's playing hockey]
+
+  - en: Ann is playing volleyball
+    ca: [l'Ann està jugant a voleibol, Ann està jugant a voleibol, l'Ann està jugant a vòlei]
+    altEn: [Ann's playing volleyball]
+
+  - en: we are doing karate
+    ca: [estem fent karate, nosaltres estem fent karate]
+    altEn: [we're doing karate, we are practising karate]
+
+  - en: she is playing tennis
+    ca: [està jugant a tennis, ella està jugant a tennis]
+    altEn: [she's playing tennis]
+
+  - en: they are playing rugby
+    ca: [estan jugant a rugbi, ells estan jugant a rugbi]
+    altEn: [they're playing rugby]
+
+  - en: he is playing baseball
+    ca: [està jugant a beisbol, ell està jugant a beisbol]
+    altEn: [he's playing baseball]
