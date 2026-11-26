@@ -1,0 +1,107 @@
+# Llista de vocabulari per practicar
+# Format:
+#   - en: paraula en anglès
+#     ca: [llista, de, traduccions, en, català]
+#     altEn: [alternatives, en, anglès]  # opcional
+#
+# Exemple:
+#   - en: cat
+#     ca: [gat]
+#   - en: dog
+#     ca: [gos, gossa]
+#     altEn: [doggy]
+
+titulo: Vocabulari d'Esports i Hàbits Saludables
+descripcion: Practica el vocabulari d'anglès sobre equipament esportiu i hàbits de vida saludable
+
+paraules:
+  # Equipament esportiu
+  - en: belt
+    ca: [cinturó]
+
+  - en: goggles
+    ca: [ulleres de piscina]
+
+  - en: racket
+    ca: [raqueta]
+
+  - en: skates
+    ca: [patins]
+
+  - en: sneakers
+    ca: [bambes]
+
+  - en: stick
+    ca: [stick]
+
+  - en: wetsuit
+    ca: [neoprè]
+
+  - en: helmet
+    ca: [casc]
+
+  - en: swimsuit
+    ca: [banyador]
+
+  - en: skateboard
+    ca: [skate]
+    altEn: [skate board]
+
+  - en: baseball bat
+    ca: [bate]
+
+  - en: knee pads
+    ca: [genolleres]
+
+  - en: fishing rod
+    ca: [canya]
+
+  - en: net
+    ca: [xarxa]
+
+  - en: whistle
+    ca: [xiulet]
+
+  - en: shuttlecock
+    ca: [volant]
+
+  # Hàbits saludables
+  - en: drink water
+    ca: [beure aigua]
+
+  - en: eat healthy
+    ca: [menjar saludable]
+
+  - en: do exercise
+    ca: [fer exercici]
+
+  - en: sleep well (8 hours)
+    ca: [dormir 8 hores]
+    altEn: [sleep well]
+
+  - en: have good hygiene
+    ca: [tenir bona higiene]
+
+  - en: wash your hands and your body
+    ca: [rentar-te les mans i el cos]
+
+  - en: brush your teeth
+    ca: [rentar-te les dents]
+
+  - en: eat too many sweets
+    ca: [menjar moltes llaminadures]
+
+  - en: drink too much soda
+    ca: [beure molts refrescos]
+
+  - en: no exercise
+    ca: [no fer exercici]
+
+  - en: not sleep enough
+    ca: [no dormir prou]
+
+  - en: talk to others about your feelings
+    ca: [parlar dels teus sentiments]
+
+  - en: eat a balanced diet
+    ca: [menjar equilibrat]

@@ -1,0 +1,191 @@
+# Examen d'anglès del Roc — 2026-10-27
+# Fonts: fitxes "Meat and Fish / Food in General" i "Fruit / Vegetables"
+
+titulo: Food
+descripcion: Examen del Roc (27/10/2026) — aliments
+
+paraules:
+  # Meat and Fish
+  - en: meat
+    ca: [carn]
+
+  - en: steak
+    ca: [bistec]
+
+  - en: chicken
+    ca: [pollastre]
+
+  - en: beef
+    ca: [vedella]
+
+  - en: sausage
+    ca: [salsitxa]
+
+  - en: ham
+    ca: [pernil]
+
+  - en: eggs
+    ca: [ous]
+
+  - en: fish
+    ca: [peix]
+
+  - en: lamb
+    ca: [xai]
+
+  # Food in General
+  - en: butter
+    ca: [mantega]
+
+  - en: bread
+    ca: [pa]
+
+  - en: chips
+    ca: [patates fregides]
+
+
+  - en: cereal
+    ca: [cereals]
+
+  - en: coffee
+    ca: [cafè]
+
+  - en: honey
+    ca: [mel]
+
+  - en: ice cream
+    ca: [gelat]
+
+  - en: jam
+    ca: [melmelada]
+
+  - en: milk
+    ca: [llet]
+
+  - en: orange juice
+    ca: [suc de taronja]
+
+  - en: soup
+    ca: [sopa]
+
+  - en: toast
+    ca: [torrada]
+
+  - en: water
+    ca: [aigua]
+
+  - en: wine
+    ca: [vi]
+
+  - en: cheese
+    ca: [formatge]
+
+  - en: oil
+    ca: [oli]
+
+  - en: sugar
+    ca: [sucre]
+
+  - en: sweets
+    ca: [dolços]
+
+
+  - en: cakes
+    ca: [pastissos]
+
+  - en: biscuits
+    ca: [galetes]
+
+
+  # Fruit
+  - en: watermelon
+    ca: [síndria]
+
+  - en: melon
+    ca: [meló]
+
+  - en: pineapple
+    ca: [pinya]
+
+  - en: coconut
+    ca: [coco]
+
+  - en: apple
+    ca: [poma]
+
+  - en: orange
+    ca: [taronja]
+
+  - en: lemon
+    ca: [llimona]
+
+  - en: pear
+    ca: [pera]
+
+  - en: peach
+    ca: [préssec]
+
+  - en: grapes
+    ca: [raïm]
+
+  - en: plum
+    ca: [pruna]
+
+  - en: banana
+    ca: [plàtan]
+
+  - en: strawberry
+    ca: [maduixa]
+
+  - en: cherry
+    ca: [cirera]
+
+  # Vegetables
+  - en: cabbage
+    ca: [col]
+
+  - en: salad
+    ca: [amanida]
+
+  - en: lettuce
+    ca: [enciam]
+
+  - en: potato
+    ca: [patata]
+
+  - en: carrot
+    ca: [pastanaga]
+
+  - en: cucumber
+    ca: [cogombre]
+
+  - en: beans
+    ca: [mongetes]
+
+  - en: corn
+    ca: [blat de moro]
+
+
+  - en: tomato
+    ca: [tomàquet]
+
+  - en: green pepper
+    ca: [pebrot verd]
+
+  - en: rice
+    ca: [arròs]
+
+  - en: onion
+    ca: [ceba]
+
+  - en: garlic
+    ca: [all]
+
+  - en: peas
+    ca: [pèsols]
+
+  - en: mushroom
+    ca: [bolet]
+
+  - en: artichoke
+    ca: [carxofa]

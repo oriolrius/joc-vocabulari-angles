@@ -453,6 +453,22 @@
             margin: 25px 0;
         }
 
+        .list-select {
+            width: 100%;
+            font-size: 1.1em;
+            padding: 12px 14px;
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            background: white;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .list-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+        }
+
         .question-count-selector label {
             display: block;
             font-size: 1.2em;
@@ -675,6 +691,11 @@
             <p class="subtitle" id="main-subtitle"></p>
             <div class="emoji">📚✏️🎯</div>
 
+            <div class="question-count-selector" id="list-selector">
+                <label for="list-select">Quina llista vols practicar?</label>
+                <select id="list-select" class="list-select"></select>
+            </div>
+
             <div class="question-count-selector">
                 <label>Quines paraules?</label>
                 <div class="count-buttons">
@@ -887,33 +908,100 @@
             return result;
         }
 
-        // Carregar vocabulari des del YAML
+        // Llistes de vocabulari: carpeta vocabulari/ + índex vocabulari/llistes.json
+        const VOCAB_DIR = 'vocabulari/';
+        const LIST_STORAGE_KEY = 'vocabularyList';
+        let vocabLists = [];        // { id, grup, nom, data }
+        let currentListId = null;
+
+        async function fetchVocabFile(path) {
+            const response = await fetch(path, { cache: 'no-cache' });
+            if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
+            return parseYAML(await response.text());
+        }
+
+        function readStoredList() {
+            try { return localStorage.getItem(LIST_STORAGE_KEY); } catch (e) { return null; }
+        }
+
+        // Omplir el desplegable, agrupat per "grup"
+        function buildListSelect() {
+            const select = document.getElementById('list-select');
+            select.innerHTML = '';
+            const groups = new Map();
+            for (const list of vocabLists) {
+                const name = list.grup || 'Llistes';
+                if (!groups.has(name)) groups.set(name, []);
+                groups.get(name).push(list);
+            }
+            for (const [name, lists] of groups) {
+                const parent = groups.size > 1 ? document.createElement('optgroup') : select;
+                if (parent !== select) parent.label = name;
+                for (const list of lists) {
+                    const option = document.createElement('option');
+                    option.value = list.id;
+                    option.textContent = `${list.nom || list.data.titulo || list.id} (${list.data.paraules.length} paraules)`;
+                    parent.appendChild(option);
+                }
+                if (parent !== select) select.appendChild(parent);
+            }
+        }
+
+        // Activar una llista: vocabulari, títols, URL (?llista=...) i historial
+        function selectList(id) {
+            const list = vocabLists.find(l => l.id === id) || vocabLists[0];
+            currentListId = list.id;
+            vocabulary = list.data.paraules;
+            vocabTitle = list.data.titulo || 'Vocabulari';
+            vocabDescription = list.data.descripcion || 'Practica el vocabulari';
+
+            document.getElementById('list-select').value = list.id;
+            document.getElementById('main-title').textContent = vocabTitle;
+            document.getElementById('main-subtitle').textContent = vocabDescription;
+            document.getElementById('game-title').textContent = vocabTitle;
+            document.title = vocabTitle;
+
+            try { localStorage.setItem(LIST_STORAGE_KEY, list.id); } catch (e) { /* sense localStorage */ }
+            const url = new URL(window.location.href);
+            if (url.searchParams.get('llista') !== list.id) {
+                url.searchParams.set('llista', list.id);
+                history.replaceState(null, '', url);
+            }
+
+            displayHistory();
+            updateCountInfo();
+            console.log(`Llista "${list.id}": ${vocabulary.length} paraules`);
+        }
+
+        // Carregar l'índex i totes les llistes
         async function loadVocabulary() {
             try {
-                const response = await fetch('vocabulari.yaml');
-                if (!response.ok) throw new Error('No s\'ha pogut carregar el vocabulari');
+                const response = await fetch(VOCAB_DIR + 'llistes.json', { cache: 'no-cache' });
+                if (!response.ok) throw new Error(`llistes.json: HTTP ${response.status}`);
+                const index = await response.json();
 
-                const yamlText = await response.text();
-                const data = parseYAML(yamlText);
+                const results = await Promise.allSettled(index.llistes.map(async entry => ({
+                    id: entry.fitxer.replace(/\.ya?ml$/, ''),
+                    grup: entry.grup,
+                    nom: entry.nom,
+                    data: await fetchVocabFile(VOCAB_DIR + entry.fitxer)
+                })));
+                results.filter(r => r.status === 'rejected').forEach(r => console.error('Error carregant llista:', r.reason));
+                vocabLists = results
+                    .filter(r => r.status === 'fulfilled' && r.value.data.paraules.length > 0)
+                    .map(r => r.value);
+                if (vocabLists.length === 0) throw new Error('Cap llista de vocabulari vàlida');
 
-                vocabulary = data.paraules;
-                vocabTitle = data.titulo || 'Vocabulari';
-                vocabDescription = data.descripcion || 'Practica el vocabulari';
-
-                // Actualitzar títols
-                document.getElementById('main-title').textContent = vocabTitle;
-                document.getElementById('main-subtitle').textContent = vocabDescription;
-                document.getElementById('game-title').textContent = vocabTitle;
-                document.title = vocabTitle;
-
-                // Actualitzar info de preguntes
-                document.getElementById('count-info').textContent = `Partida de 15 preguntes`;
-
-                console.log(`Carregades ${vocabulary.length} paraules`);
+                buildListSelect();
+                const wanted = new URL(window.location.href).searchParams.get('llista');
+                const ids = vocabLists.map(l => l.id);
+                const id = [wanted, readStoredList(), index.perDefecte].find(x => x && ids.includes(x)) || ids[0];
+                selectList(id);
             } catch (error) {
                 console.error('Error carregant vocabulari:', error);
+                document.getElementById('list-selector').style.display = 'none';
                 document.getElementById('main-title').textContent = 'Error carregant vocabulari';
-                document.getElementById('main-subtitle').textContent = 'Comprova que el fitxer vocabulari.yaml existeix';
+                document.getElementById('main-subtitle').textContent = 'Comprova la carpeta vocabulari/ i el fitxer vocabulari/llistes.json';
             }
         }
 
@@ -951,8 +1039,13 @@
         }
 
         // Obtenir historial de partides
+        // Cada llista té el seu historial
+        function historyKey() {
+            return `vocabularyHistory:${currentListId}`;
+        }
+
         function getGameHistory() {
-            const data = localStorage.getItem('vocabularyHistory');
+            const data = localStorage.getItem(historyKey());
             return data ? JSON.parse(data) : [];
         }
 
@@ -967,7 +1060,7 @@
             });
             // Guardar només les últimes 10 partides
             if (history.length > 10) history.pop();
-            localStorage.setItem('vocabularyHistory', JSON.stringify(history));
+            localStorage.setItem(historyKey(), JSON.stringify(history));
         }
 
         // Mostrar historial
@@ -1578,9 +1671,12 @@
 
         // Esborrar historial
         function clearHistory() {
-            if (confirm('Segur que vols esborrar tot l\'historial i les dades de dificultat?')) {
-                localStorage.removeItem('vocabularyHistory');
-                localStorage.removeItem('vocabularyDifficulty');
+            // Només la llista actual: el seu historial i les estadístiques de les seves paraules
+            if (confirm(`Segur que vols esborrar l'historial i les estadístiques de la llista "${vocabTitle}"?`)) {
+                localStorage.removeItem(historyKey());
+                const difficulty = getDifficultyData();
+                for (const word of vocabulary) delete difficulty[word.en];
+                saveDifficultyData(difficulty);
                 displayHistory();
                 updateCountInfo();
             }
@@ -1724,6 +1820,7 @@
         }
 
         // Event listeners
+        document.getElementById('list-select').addEventListener('change', e => selectList(e.target.value));
         document.getElementById('start-btn').addEventListener('click', startGame);
         document.getElementById('submit-btn').addEventListener('click', submitAnswer);
         document.getElementById('next-btn').addEventListener('click', nextQuestion);
@@ -1785,9 +1882,7 @@
         });
 
         // Inicialitzar
-        loadVocabulary().then(() => {
-            displayHistory();
-        });
+        loadVocabulary();
     </script>
 </body>
 </html>

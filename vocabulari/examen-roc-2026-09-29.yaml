@@ -1,0 +1,114 @@
+# Examen d'anglès del Roc — 2026-09-29
+# Font: fitxa "Classroom Objects" (foto Braintoss 2026-09-27)
+# Respostes de la fitxa a revisar (ortografia o paraula incorrecta):
+#   bin=brosa (brossa), board eraser=buradar (esborrador),
+#   bookcase=estanteria (prestatgeria), drawing pin=xintetas (xinxeta),
+#   ruler=regla (regle), sello tape=selo (cel·lo), teacher=profesor (professor)
+
+titulo: Classroom Objects
+descripcion: Examen del Roc (29/09/2026) — els objectes de la classe
+
+paraules:
+  - en: bin
+    ca: [brossa, paperera]
+
+  - en: board
+    ca: [pissarra]
+
+  - en: board eraser
+    ca: [esborrador]
+
+  - en: bookcase
+    ca: [prestatgeria, estanteria]
+
+  - en: box
+    ca: [caixa]
+
+  - en: calculator
+    ca: [calculadora]
+
+  - en: chair
+    ca: [cadira]
+
+  - en: chalk
+    ca: [guix]
+
+  - en: computer
+    ca: [ordinador]
+
+  - en: cupboard
+    ca: [armari]
+
+  - en: desk
+    ca: [pupitre, taula]
+
+  - en: drawing
+    ca: [dibuix]
+
+  - en: drawing pin
+    ca: [xinxeta, xinxetes]
+
+  - en: folder
+    ca: [carpeta]
+
+  - en: glue
+    ca: [cola, pega]
+
+  - en: paintbrush
+    ca: [pinzell]
+
+  - en: paper
+    ca: [paper]
+
+  - en: paperclip
+    ca: [clip]
+
+  - en: pupils
+    ca: [alumnes]
+
+  - en: scissors
+    ca: [tisores]
+
+  - en: stapler
+    ca: [grapadora]
+
+  - en: sticky tape
+    ca: [cel·lo, cinta adhesiva]
+    altEn: [sellotape, sello tape]
+
+  - en: teacher
+    ca: [professor, mestre]
+
+  - en: pen
+    ca: [boli, bolígraf]
+
+  - en: pencil
+    ca: [llapis]
+
+  - en: rubber
+    ca: [goma]
+    altEn: [eraser]
+
+  - en: ruler
+    ca: [regle]
+
+  - en: classroom
+    ca: [classe, aula]
+
+  - en: book
+    ca: [llibre]
+
+  - en: notebook
+    ca: [llibreta]
+
+  - en: marker
+    ca: [retolador]
+
+  - en: crayon
+    ca: [cera, colors]
+
+  - en: backpack
+    ca: [motxilla]
+
+  - en: sharpener
+    ca: [maquineta]

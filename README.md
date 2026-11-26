@@ -10,7 +10,8 @@ Joc web interactiu per practicar vocabulari anglès-català. Ideal per preparar 
 - **Paraules difícils**: Les paraules amb més errors apareixen més sovint
 - **Partida de repàs ("Les que fallo més")**: Només pregunta les paraules que falles sovint, i les repeteix fins arribar al nombre de preguntes
 - **Tolerant amb errors**: Accepta petits errors d'escriptura i ignora accents
-- **Vocabulari extern**: Fàcil de canviar la llista de paraules
+- **Diverses llistes**: Un desplegable a l'inici tria quina llista practicar (carpeta `vocabulari/`)
+- **URL per llista**: `?llista=<nom>` obre directament una llista (p. ex. `?llista=cos`)
 
 ## Partida de repàs: "Les que fallo més"
 
@@ -32,9 +33,13 @@ A la pantalla d'inici, a **Quines paraules?**, tria **🔁 Les que fallo més**:
 
 ## Com usar-lo
 
-### 1. Crear o editar la llista de paraules
+### 1. Crear o editar les llistes de paraules
 
-Edita el fitxer `vocabulari.yaml` amb qualsevol editor de text. El format és:
+Cada llista és un fitxer YAML a la carpeta `vocabulari/`. A la pantalla d'inici, el
+desplegable **Quina llista vols practicar?** mostra totes les llistes de
+`vocabulari/llistes.json`.
+
+El format d'una llista (p. ex. `vocabulari/animals.yaml`) és:
 
 ```yaml
 titulo: El títol del vocabulari
@@ -64,6 +69,36 @@ paraules:
 - Posa diverses traduccions si una paraula té sinònims: `ca: [gos, gossa, gossot]`
 - Usa `altEn` per acceptar diferents formes: `altEn: [pajamas]` per a `pyjamas`
 - Els accents i majúscules s'ignoren automàticament
+
+#### Afegir una llista nova
+
+1. Crea el fitxer a `vocabulari/`, p. ex. `vocabulari/examen-roc-2026-12-03.yaml`.
+2. Afegeix-lo a `vocabulari/llistes.json`:
+
+```json
+{
+  "perDefecte": "examen-roc-2026-12-03",
+  "llistes": [
+    { "fitxer": "examen-roc-2026-12-03.yaml", "grup": "Exàmens", "nom": "Roc 03/12/2026 · Unit 2" },
+    { "fitxer": "cos.yaml", "grup": "Temes" }
+  ]
+}
+```
+
+- `fitxer`: nom del fitxer a `vocabulari/`. El nom sense `.yaml` és l'identificador de la llista.
+- `grup`: grup del desplegable (p. ex. `Exàmens`, `Temes`). Opcional.
+- `nom`: text del desplegable. Opcional: si no hi és, surt el `titulo` del YAML.
+- `perDefecte`: llista que surt la primera vegada. Després, el navegador recorda l'última llista.
+
+L'ordre del desplegable és l'ordre de `llistes.json`. Un fitxer amb errors no surt al
+desplegable (la consola del navegador diu per què).
+
+#### Enllaç directe a una llista
+
+`http://SERVIDOR/?llista=cos` obre la llista `cos`. Quan canvies de llista, la URL canvia
+sola: la pots copiar i enviar.
+
+Prioritat: `?llista=` a la URL → l'última llista del navegador → `perDefecte` → la primera.
 
 ### 2. Llençar el servidor web
 
@@ -225,26 +260,23 @@ joc-vocabulari-angles/
 ├── index.html        # El joc (no cal tocar-lo)
 ├── http-server       # Servidor web (binari Rust estàtic, sense dependències)
 ├── rust-http-server/ # Codi font del servidor web
-├── vocabulari.yaml   # Llista de paraules (editable)
+├── vocabulari/       # Llistes de paraules (editables)
+│   ├── llistes.json  # Índex del desplegable
+│   └── *.yaml        # Una llista per fitxer
 ├── docs/screenshots/ # Captures del README
 └── README.md         # Aquest fitxer
 ```
 
-## Crear múltiples llistes de vocabulari
-
-Pots tenir diverses llistes de vocabulari i canviar entre elles:
-
-1. Crea fitxers com `animals.yaml`, `colors.yaml`, `verbs.yaml`
-2. Quan vulguis canviar de llista, renombra o copia:
-```bash
-cp animals.yaml vocabulari.yaml
-```
-3. Refresca el navegador
-
 ## Esborrar estadístiques
 
-Les estadístiques es guarden al navegador (localStorage). Per esborrar-les:
-- Clica "Esborrar historial" a la pantalla d'inici, o
+Les estadístiques es guarden al navegador (localStorage):
+- L'**historial de partides** és de cada llista.
+- Els **encerts i errors** són de cada paraula anglesa: si una paraula surt a dues llistes,
+  comparteix les estadístiques.
+
+Per esborrar-les:
+- Clica "Esborrar historial" a la pantalla d'inici: esborra l'historial i les estadístiques
+  de les paraules **de la llista actual**, o
 - Obre les eines de desenvolupador del navegador (F12) → Application → Local Storage → Eliminar
 
 ## Llicència

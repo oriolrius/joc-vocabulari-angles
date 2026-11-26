@@ -1,0 +1,51 @@
+# Examen d'anglès del Nil — 2026-09-29
+# Font: fitxa "Everyday Actions" (21/09/2026)
+# Fallades a la fitxa: get dressed, go to school, have a bath, go to bed
+
+titulo: Everyday Actions
+descripcion: Examen del Nil (29/09/2026) — les accions de cada dia
+
+paraules:
+  - en: wake up
+    ca: [despertar-se, llevar-se]
+    altEn: [get up]
+
+  - en: have breakfast
+    ca: [esmorzar]
+
+  - en: brush your teeth
+    ca: [rentar-se les dents]
+    altEn: [brush my teeth]
+
+  - en: get dressed
+    ca: [vestir-se]
+
+  - en: make your bed
+    ca: [fer el llit]
+    altEn: [make my bed, make the bed]
+
+  - en: go to school
+    ca: [anar a l'escola, anar al col·legi]
+
+  - en: have lunch
+    ca: [dinar]
+
+  - en: do your homework
+    ca: [fer els deures]
+    altEn: [do my homework]
+
+  - en: play with friends
+    ca: [jugar amb els amics]
+
+  - en: ride a bike
+    ca: [anar en bici, anar amb bicicleta, anar en bicicleta]
+
+  - en: have a bath
+    ca: [banyar-se, fer-se un bany]
+    altEn: [take a bath]
+
+  - en: have dinner
+    ca: [sopar]
+
+  - en: go to bed
+    ca: [anar a dormir, anar al llit]

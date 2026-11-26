@@ -1,0 +1,14 @@
+{
+  "perDefecte": "examen-roc-2026-11-12",
+  "llistes": [
+    { "fitxer": "examen-roc-2026-11-12.yaml", "grup": "Exàmens", "nom": "Roc 12/11/2026 · Movers Unit 1" },
+    { "fitxer": "examen-roc-2026-10-27.yaml", "grup": "Exàmens", "nom": "Roc 27/10/2026 · Food" },
+    { "fitxer": "examen-roc-2026-09-29.yaml", "grup": "Exàmens", "nom": "Roc 29/09/2026 · Classroom Objects" },
+    { "fitxer": "examen-nil-2026-09-29.yaml", "grup": "Exàmens", "nom": "Nil 29/09/2026 · Everyday Actions" },
+    { "fitxer": "cos.yaml", "grup": "Temes" },
+    { "fitxer": "cos-curt.yaml", "grup": "Temes" },
+    { "fitxer": "roba.yaml", "grup": "Temes" },
+    { "fitxer": "roba-accessoris.yaml", "grup": "Temes" },
+    { "fitxer": "esports-habits.yaml", "grup": "Temes" }
+  ]
+}

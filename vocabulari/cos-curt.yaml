@@ -1,0 +1,41 @@
+titulo: Vocabulari del Cos (curt)
+descripcion: Practica el vocabulari d'anglès sobre les parts del cos
+
+paraules:
+  - en: hair
+    ca: [cabell, cabells]
+
+  - en: head
+    ca: [cap]
+
+  - en: eye
+    ca: [ull, ulls]
+
+  - en: ear
+    ca: [orella, orelles]
+
+  - en: nose
+    ca: [nas]
+
+  - en: mouth
+    ca: [boca]
+
+  - en: arm
+    ca: [braç, braços]
+
+  - en: hand
+    ca: [mà, mans]
+
+  - en: finger
+    ca: [dit, dits]
+
+  - en: tummy
+    ca: [panxa, ventre]
+    altEn: [belly, stomach]
+
+  - en: leg
+    ca: [cama, cames]
+
+  - en: foot
+    ca: [peu, peus]
+    altEn: [feet]
