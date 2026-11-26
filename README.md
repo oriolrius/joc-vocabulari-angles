@@ -11,7 +11,7 @@ Joc web interactiu per practicar vocabulari anglès-català. Ideal per preparar 
 - **Partida de repàs ("Les que fallo més")**: Només pregunta les paraules que falles sovint, i les repeteix fins arribar al nombre de preguntes
 - **Tolerant amb errors**: Accepta petits errors d'escriptura i ignora accents
 - **Diverses llistes**: Un desplegable a l'inici tria quina llista practicar (carpeta `vocabulari/`)
-- **URL per llista**: `?llista=<nom>` obre directament una llista (p. ex. `?llista=cos`)
+- **URL per llista**: `?llista=<nom>` obre directament una llista (p. ex. `?llista=2026-05-18-roc-cos`)
 
 ## Partida de repàs: "Les que fallo més"
 
@@ -39,7 +39,7 @@ Cada llista és un fitxer YAML a la carpeta `vocabulari/`. A la pantalla d'inici
 desplegable **Quina llista vols practicar?** mostra totes les llistes de
 `vocabulari/llistes.json`.
 
-El format d'una llista (p. ex. `vocabulari/animals.yaml`) és:
+El format d'una llista (p. ex. `vocabulari/2026-12-03-roc-animals.yaml`) és:
 
 ```yaml
 titulo: El títol del vocabulari
@@ -72,15 +72,16 @@ paraules:
 
 #### Afegir una llista nova
 
-1. Crea el fitxer a `vocabulari/`, p. ex. `vocabulari/examen-roc-2026-12-03.yaml`.
+1. Crea el fitxer a `vocabulari/` amb el nom `AAAA-MM-DD-nen-contingut.yaml`:
+   la data (examen o creació), el nom del nen i de què va. P. ex. `vocabulari/2026-12-03-roc-animals.yaml`.
 2. Afegeix-lo a `vocabulari/llistes.json`:
 
 ```json
 {
-  "perDefecte": "examen-roc-2026-12-03",
+  "perDefecte": "2026-12-03-roc-animals",
   "llistes": [
-    { "fitxer": "examen-roc-2026-12-03.yaml", "nom": "Roc 03/12/2026 · Unit 2" },
-    { "fitxer": "cos.yaml" }
+    { "fitxer": "2026-12-03-roc-animals.yaml", "nom": "2026-12-03 · Roc · Animals" },
+    { "fitxer": "2026-05-18-roc-cos.yaml" }
   ]
 }
 ```
@@ -89,12 +90,12 @@ paraules:
 - `nom`: text del desplegable. Opcional: si no hi és, surt el `titulo` del YAML.
 - `perDefecte`: llista que surt la primera vegada. Després, el navegador recorda l'última llista.
 
-L'ordre del desplegable és l'ordre de `llistes.json`. Un fitxer amb errors no surt al
+L'ordre del desplegable és l'ordre de `llistes.json` (posa la més nova a dalt). Un fitxer amb errors no surt al
 desplegable (la consola del navegador diu per què).
 
 #### Enllaç directe a una llista
 
-`http://SERVIDOR/?llista=cos` obre la llista `cos`. Quan canvies de llista, la URL canvia
+`http://SERVIDOR/?llista=2026-05-18-roc-cos` obre la llista `2026-05-18-roc-cos`. Quan canvies de llista, la URL canvia
 sola: la pots copiar i enviar.
 
 Prioritat: `?llista=` a la URL → l'última llista del navegador → `perDefecte` → la primera.

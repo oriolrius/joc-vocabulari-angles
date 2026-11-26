@@ -1,11 +1,11 @@
 # Examen d'anglès del Nil — 2026-11-26
-# Font: fitxa "Present Continuous Tense" (foto 2026-11-26), nota VG
+# Font: fitxa d'esports "Present Continuous Tense" (foto 2026-11-26), nota VG
 # Errors a la fitxa:
 #   i am (I majúscula), pleaying (playing), rugbby (rugby),
 #   volleball (volleyball), foatball (football), gole (golf)
 
-titulo: Present Continuous
-descripcion: Examen del Nil (26/11/2026) — esports i present continu
+titulo: Sports
+descripcion: Examen del Nil (26/11/2026) — esports
 
 paraules:
   # Esports
@@ -40,7 +40,7 @@ paraules:
   - en: playing
     ca: [jugant]
 
-  # Frases en present continu
+  # Frases (què fa cadascú)
   - en: they are playing football
     ca: [estan jugant a futbol, ells estan jugant a futbol]
     altEn: [they're playing football]

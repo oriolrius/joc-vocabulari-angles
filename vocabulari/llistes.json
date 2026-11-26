@@ -1,15 +1,15 @@
 {
-  "perDefecte": "examen-nil-2026-11-26",
+  "perDefecte": "2026-11-26-nil-esports",
   "llistes": [
-    { "fitxer": "examen-nil-2026-11-26.yaml", "nom": "Nil 26/11/2026 · Present Continuous" },
-    { "fitxer": "examen-roc-2026-11-12.yaml", "nom": "Roc 12/11/2026 · Movers Unit 1" },
-    { "fitxer": "examen-roc-2026-10-27.yaml", "nom": "Roc 27/10/2026 · Food" },
-    { "fitxer": "examen-roc-2026-09-29.yaml", "nom": "Roc 29/09/2026 · Classroom Objects" },
-    { "fitxer": "examen-nil-2026-09-29.yaml", "nom": "Nil 29/09/2026 · Everyday Actions" },
-    { "fitxer": "cos.yaml" },
-    { "fitxer": "cos-curt.yaml" },
-    { "fitxer": "roba.yaml" },
-    { "fitxer": "roba-accessoris.yaml" },
-    { "fitxer": "esports-habits.yaml" }
+    { "fitxer": "2026-11-26-nil-esports.yaml", "nom": "2026-11-26 · Nil · Sports" },
+    { "fitxer": "2026-11-12-roc-movers-unit1.yaml", "nom": "2026-11-12 · Roc · Movers Unit 1" },
+    { "fitxer": "2026-10-27-roc-food.yaml", "nom": "2026-10-27 · Roc · Food" },
+    { "fitxer": "2026-09-29-roc-classroom-objects.yaml", "nom": "2026-09-29 · Roc · Classroom Objects" },
+    { "fitxer": "2026-09-29-nil-everyday-actions.yaml", "nom": "2026-09-29 · Nil · Everyday Actions" },
+    { "fitxer": "2026-05-18-roc-cos.yaml", "nom": "2026-05-18 · Roc · El cos" },
+    { "fitxer": "2026-05-18-roc-cos-curt.yaml", "nom": "2026-05-18 · Roc · El cos (curt)" },
+    { "fitxer": "2026-05-18-roc-roba-accessoris.yaml", "nom": "2026-05-18 · Roc · Roba i accessoris" },
+    { "fitxer": "2026-02-17-roc-esports-habits.yaml", "nom": "2026-02-17 · Roc · Esports i hàbits saludables" },
+    { "fitxer": "2026-01-20-roc-roba.yaml", "nom": "2026-01-20 · Roc · Roba" }
   ]
 }
