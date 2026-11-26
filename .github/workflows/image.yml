@@ -1,0 +1,55 @@
+name: Imatge Docker
+
+# Publica la imatge del joc a ghcr.io/oriolrius/joc-vocabulari-angles.
+# - Push d'un tag v*      -> tags <versió> (sense "v"), latest i sha-<commit>.
+#                            k5 (git.oriolrius.cat/oriolrius/k5-stack-angles) segueix :latest:
+#                            el seu workflow de deploy mira cada 5 minuts si el digest ha canviat.
+# - Manual (workflow_dispatch) -> només sha-<commit>: una imatge de prova que k5 no desplega.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+env:
+  IMAGE: ghcr.io/${{ github.repository }}
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Versió
+        id: v
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = tag ]; then
+            echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+            echo "release=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=sha-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+            echo "release=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          push: true
+          build-args: |
+            VERSION=${{ steps.v.outputs.version }}
+            REVISION=${{ github.sha }}
+          tags: |
+            ${{ env.IMAGE }}:sha-${{ github.sha }}
+            ${{ steps.v.outputs.release == 'true' && format('{0}:{1}', env.IMAGE, steps.v.outputs.version) || '' }}
+            ${{ steps.v.outputs.release == 'true' && format('{0}:latest', env.IMAGE) || '' }}
+          platforms: linux/amd64
+          provenance: false

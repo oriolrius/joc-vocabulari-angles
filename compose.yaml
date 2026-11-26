@@ -1,0 +1,21 @@
+# Local run of the game in Docker: docker compose up --build -> http://localhost:8080
+# Production (k5) uses the image from ghcr and its own stack: git.oriolrius.cat/oriolrius/k5-stack-angles
+name: joc-vocabulari-angles
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        VERSION: local
+        REVISION: local
+    image: joc-vocabulari-angles:local
+    ports:
+      - "${PORT:-8080}:8080"
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 64m
+    restart: unless-stopped

@@ -253,11 +253,36 @@ sudo python3 -m http.server 80
 
 ---
 
+## Docker
+
+```bash
+docker compose up -d --build           # http://localhost:8080
+PORT=9000 docker compose up -d --build # un altre port
+```
+
+La imatge (`Dockerfile`) és nginx sense root, amb `index.html` i `vocabulari/`. Envia
+`Cache-Control: no-cache` i té `/healthz` (capçaleres `X-App-Version` i `X-Site-Revision`).
+
+## Producció: https://angles.riusbarbera.family
+
+1. Canvia les llistes a `vocabulari/`, fes commit i push a `main`.
+2. Treu una versió: `git tag -a v0.5.0 -m v0.5.0 && git push origin v0.5.0`.
+3. El workflow `.github/workflows/image.yml` publica `ghcr.io/oriolrius/joc-vocabulari-angles`
+   amb els tags `0.5.0`, `latest` i `sha-<commit>`.
+4. A k5, el repo de l'stack (`git.oriolrius.cat/oriolrius/k5-stack-angles`, privat) mira cada
+   5 minuts el digest de `:latest`. Si ha canviat, el fixa a `compose.yaml`, desplega amb
+   Dockhand i comprova la versió a `/healthz`. Si falla, torna a la versió d'abans.
+
+GitHub no té cap secret de k5: és k5 qui mira ghcr.
+
 ## Estructura de fitxers
 
 ```
 joc-vocabulari-angles/
 ├── index.html        # El joc (no cal tocar-lo)
+├── Dockerfile        # Imatge del joc (nginx)
+├── compose.yaml      # Per provar la imatge en local
+├── deploy/nginx.conf # Configuració de nginx de la imatge
 ├── http-server       # Servidor web (binari Rust estàtic, sense dependències)
 ├── rust-http-server/ # Codi font del servidor web
 ├── vocabulari/       # Llistes de paraules (editables)
