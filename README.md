@@ -79,14 +79,13 @@ paraules:
 {
   "perDefecte": "examen-roc-2026-12-03",
   "llistes": [
-    { "fitxer": "examen-roc-2026-12-03.yaml", "grup": "Exàmens", "nom": "Roc 03/12/2026 · Unit 2" },
-    { "fitxer": "cos.yaml", "grup": "Temes" }
+    { "fitxer": "examen-roc-2026-12-03.yaml", "nom": "Roc 03/12/2026 · Unit 2" },
+    { "fitxer": "cos.yaml" }
   ]
 }
 ```
 
 - `fitxer`: nom del fitxer a `vocabulari/`. El nom sense `.yaml` és l'identificador de la llista.
-- `grup`: grup del desplegable (p. ex. `Exàmens`, `Temes`). Opcional.
 - `nom`: text del desplegable. Opcional: si no hi és, surt el `titulo` del YAML.
 - `perDefecte`: llista que surt la primera vegada. Després, el navegador recorda l'última llista.
 

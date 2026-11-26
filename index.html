@@ -911,7 +911,7 @@
         // Llistes de vocabulari: carpeta vocabulari/ + índex vocabulari/llistes.json
         const VOCAB_DIR = 'vocabulari/';
         const LIST_STORAGE_KEY = 'vocabularyList';
-        let vocabLists = [];        // { id, grup, nom, data }
+        let vocabLists = [];        // { id, nom, data }
         let currentListId = null;
 
         async function fetchVocabFile(path) {
@@ -924,26 +924,15 @@
             try { return localStorage.getItem(LIST_STORAGE_KEY); } catch (e) { return null; }
         }
 
-        // Omplir el desplegable, agrupat per "grup"
+        // Omplir el desplegable, en l'ordre de llistes.json
         function buildListSelect() {
             const select = document.getElementById('list-select');
             select.innerHTML = '';
-            const groups = new Map();
             for (const list of vocabLists) {
-                const name = list.grup || 'Llistes';
-                if (!groups.has(name)) groups.set(name, []);
-                groups.get(name).push(list);
-            }
-            for (const [name, lists] of groups) {
-                const parent = groups.size > 1 ? document.createElement('optgroup') : select;
-                if (parent !== select) parent.label = name;
-                for (const list of lists) {
-                    const option = document.createElement('option');
-                    option.value = list.id;
-                    option.textContent = `${list.nom || list.data.titulo || list.id} (${list.data.paraules.length} paraules)`;
-                    parent.appendChild(option);
-                }
-                if (parent !== select) select.appendChild(parent);
+                const option = document.createElement('option');
+                option.value = list.id;
+                option.textContent = `${list.nom || list.data.titulo || list.id} (${list.data.paraules.length} paraules)`;
+                select.appendChild(option);
             }
         }
 
@@ -982,7 +971,6 @@
 
                 const results = await Promise.allSettled(index.llistes.map(async entry => ({
                     id: entry.fitxer.replace(/\.ya?ml$/, ''),
-                    grup: entry.grup,
                     nom: entry.nom,
                     data: await fetchVocabFile(VOCAB_DIR + entry.fitxer)
                 })));
